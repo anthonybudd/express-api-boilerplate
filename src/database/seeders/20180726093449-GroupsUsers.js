@@ -1,7 +1,7 @@
 const insert = [    
     {
         userID: 'c4644733-deea-47d8-b35a-86f30ff9618e',
-        groupID: '00000000-9a34-4466-ba4c-46438def7d7f',
+        groupID: 'fdab7a99-2c38-444b-bcb3-f7cef61c275b',
     }, {
         userID: 'c4644733-deea-47d8-b35a-86f30ff9618e',
         groupID: 'be1fcb4e-caf9-41c2-ac27-c06fa24da36a',

@@ -1,13 +1,17 @@
+const wrapper = require('./../../providers/wrapper');
 const { Group } = require('./../../models');
 
 module.exports = async (req, res, next) => {
+    
     const groupID = (req.params.groupID || req.body.groupID);
-
     const group = await Group.findByPk(groupID);
 
     if (group.ownerID === req.user.id) {
-        return next()
+        return next();
     } else {
-        return res.status(401).send(`Error 55213: You are not the owner of this group ${groupID}`);
+        return res.status(401).json(wrapper({
+            msg: `You are not the owner of this group ${groupID}`,
+            code: 55213,
+        }, {}, 'error'));
     }
 }

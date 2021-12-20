@@ -1,20 +1,20 @@
 # Express API Boilerplate
-
+This is a very simple REST API boilerplate using Express.js, Sequelize and MySQL.
 
 
 ### Set-up
 ```sh
-git clone https://github.com/anthonybudd/express-api-boilerplate.git
+git clone git@github.com:anthonybudd/express-api-boilerplate.git
 cd express-api-boilerplate
 cp .env.example .env
 npm install
 
-# Private RSA key for JWT Signing.
+# Private RSA key for JWT signing
 openssl genrsa -out private.pem 2048
 openssl rsa -in private.pem -outform PEM -pubout -out public.pem
 
 # Start the app
-docker-compose up
+docker compose up
 npm run _db:refresh
 npm run lint
 npm run _test

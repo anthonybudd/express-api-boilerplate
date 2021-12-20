@@ -6,7 +6,7 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 
-const GROUP_ID = '00000000-9a34-4466-ba4c-46438def7d7f';
+const GROUP_ID = 'fdab7a99-2c38-444b-bcb3-f7cef61c275b';
 const OTHER_GROUP_ID = '190c8a70-34d1-4281-a775-850058453704';
 
 describe('Groups', () => {
@@ -68,6 +68,7 @@ describe('Groups', () => {
                     res.body.data.should.be.a('object');
                     res.body.data.should.have.property('id');
                     res.body.data.should.have.property('name');
+                    res.body.data.name.should.equal('Test Group');
                     done();
                 });
         });
