@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+  express-api:
+    build: .
+    entrypoint: "nodemon /app/src/index.js --watch /app --legacy-watch"
+    container_name: express-api
+    volumes:
+      - ./:/app
+    links:
+      - express-api-db
+      - express-api-db-test
+    ports:
+      - "8080:80"
+    environment:
+      PORT: 80
+
+  express-api-db:
+    image: mysql:8
+    container_name: express-api-db
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./.vol/express-api:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: supersecret
+      MYSQL_DATABASE: $DB_DATABASE
+      MYSQL_USER: $DB_USERNAME
+      MYSQL_PASSWORD: $DB_PASSWORD
+
+  express-api-db-test:
+    image: mysql:8
+    container_name: express-api-db-test
+    restart: always
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./.vol/express-api-test:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: supersecret
+      MYSQL_DATABASE: $DB_DATABASE
+      MYSQL_USER: $DB_USERNAME
+      MYSQL_PASSWORD: $DB_PASSWORD

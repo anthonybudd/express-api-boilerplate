@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [[ $APP_ENV == "production" ]]
+  then
+    echo "APP_ENV=production ⚠️"
+  else
+    echo "APP_ENV=$APP_ENV"
+  fi
