@@ -4,6 +4,7 @@ const db = require('./../providers/db');
 module.exports = db.define('group', {
     id: {
         type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
         allowNull: false,
         unique: true

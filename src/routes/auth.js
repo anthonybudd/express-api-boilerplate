@@ -103,15 +103,13 @@ app.post('/auth/sign-up', [
             return errorHandler(error, res)
         }
     },
-
     body('email', 'This email address is taken').custom(async (email) => {
-        const user = await User.findAll({
+        const user = await User.findOne({
             where: { email },
-            limit: 1,
         });
-        return (user.length === 0);
+        
+        if (user) throw new Error('This email address is taken');
     }),
-
     body('firstName', 'You must provide your first name').exists(),
     body('lastName'),
     body('groupName'),
