@@ -8,4 +8,4 @@ module.exports = {
     isInGroup,
     isNotSelf,
     isGroupOwner,
-}
+};

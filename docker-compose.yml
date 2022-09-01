@@ -7,11 +7,12 @@ services:
     container_name: express-api
     volumes:
       - ./:/app
+      - ./.vol/tmp:/tmp
     links:
       - express-api-db
       - express-api-db-test
     ports:
-      - "8080:80"
+      - "8888:80"
     environment:
       PORT: 80
 

@@ -26,9 +26,9 @@ describe('Groups', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.should.be.json;
-                    res.body.data.should.be.a('object');
-                    res.body.data.should.have.property('id');
-                    res.body.data.should.have.property('name');
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('id');
+                    res.body.should.have.property('name');
                     done();
                 });
         });
@@ -65,10 +65,10 @@ describe('Groups', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.should.be.json;
-                    res.body.data.should.be.a('object');
-                    res.body.data.should.have.property('id');
-                    res.body.data.should.have.property('name');
-                    res.body.data.name.should.equal('Test Group');
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('id');
+                    res.body.should.have.property('name');
+                    res.body.name.should.equal('Test Group');
                     done();
                 });
         });
@@ -107,8 +107,24 @@ describe('Groups', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.should.be.json;
-                    res.body.data.should.be.a('object');
-                    res.body.data.should.have.property('id');
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('userID');
+                    res.body.should.have.property('groupID');
+                    done();
+                });
+        });
+
+        it('Should reject bad userID', done => {
+            chai.request(server)
+                .post(`/api/v1/groups/${GROUP_ID}/users/add`)
+                .set({
+                    'Authorization': `Bearer ${process.env.TEST_JWT}`,
+                })
+                .send({
+                    userID: '00000000-0000-0000-0000-000000000000',
+                })
+                .end((err, res) => {
+                    res.should.have.status(422);
                     done();
                 });
         });
@@ -129,8 +145,9 @@ describe('Groups', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.should.be.json;
-                    res.body.data.should.be.a('object');
-                    res.body.data.should.have.property('id');
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('userID');
+                    res.body.should.have.property('groupID');
                     done();
                 });
         });

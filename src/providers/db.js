@@ -26,7 +26,7 @@ const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
 });
 
 sequelize.authenticate()
-    .then(() => console.log('* Sequelize: Connected'))
+    .then(() => ((typeof global.it !== 'function') ? console.log('* Sequelize: Connected') : ''))
     .catch(err => errorHandler(err));
 
 module.exports = sequelize;

@@ -9,7 +9,7 @@ module.exports = (user, expires) => {
         firstName: user.firstName,
         lastName: user.lastName,
         displayName: user.displayName,
-    }
+    };
 
     let expiresIn = moment(new Date()).add(1, 'day').unix();
     if (Array.isArray(expires) && expires.length === 2) {
@@ -22,4 +22,4 @@ module.exports = (user, expires) => {
         expiresIn,
         algorithm: 'RS512',
     });
-}
+};

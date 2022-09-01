@@ -1,6 +1,5 @@
 const { body, validationResult, matchedData } = require('express-validator');
 const errorHandler = require('./../providers/errorHandler');
-const wrapper = require('./../providers/wrapper');
 const { User, Group } = require('./../models');
 const middleware = require('./middleware');
 const bcrypt = require('bcrypt-nodejs');
@@ -18,13 +17,13 @@ app.get('/user', [
     passport.authenticate('jwt', { session: false })
 ], async (req, res) => {
     try {
-        return res.json(wrapper(
+        return res.json(
             await User.findByPk(req.user.id, {
-                include: (req.query.with === 'groups') ? [ Group ] : [],
+                include: (req.query.with === 'groups') ? [Group] : [],
             })
-        ));
+        );
     } catch (error) {
-        errorHandler(error, res)
+        errorHandler(error, res);
     }
 });
 
@@ -45,10 +44,10 @@ app.post('/user', [
         const data = matchedData(req);
 
         await User.update(data, { where: { id: req.user.id } });
-        
-        return res.json(wrapper(
+
+        return res.json(
             await User.findByPk(req.user.id)
-        ));
+        );
     } catch (error) {
         return errorHandler(error, res);
     }
@@ -80,9 +79,8 @@ app.post('/user/update-password', [
             }
         });
 
-        return res.json(wrapper({ success: true }));
+        return res.json({ success: true });
     } catch (error) {
         return errorHandler(error, res);
     }
 });
-

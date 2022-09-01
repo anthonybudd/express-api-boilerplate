@@ -19,4 +19,4 @@ module.exports = {
     User,
     Group,
     GroupsUsers
-}
+};

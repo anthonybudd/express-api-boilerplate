@@ -1,7 +1,6 @@
 const { body, validationResult, matchedData } = require('express-validator');
 const { User, Group, GroupsUsers } = require('./../models');
 const errorHandler = require('./../providers/errorHandler');
-const wrapper = require('./../providers/wrapper');
 const middleware = require('./middleware');
 const passport = require('passport');
 const express = require('express');
@@ -19,10 +18,10 @@ app.get('/groups/:groupID', [
 ], async (req, res) => {
     try {
         const group = await Group.findByPk(req.params.groupID, {
-            include: (req.query.with === 'users')? [ User ] : [],
+            include: (req.query.with === 'users') ? [User] : [],
         });
 
-        return res.json(wrapper(group));
+        return res.json(group);
     } catch (error) {
         return errorHandler(error, res);
     }
@@ -49,9 +48,9 @@ app.post('/groups/:groupID', [
             }
         });
 
-        return res.json(wrapper(
+        return res.json(
             await Group.findByPk(req.params.groupID)
-        ));
+        );
     } catch (error) {
         return errorHandler(error, res);
     }
@@ -68,11 +67,8 @@ app.post('/groups/:groupID/users/add', [
     middleware.isNotSelf,
     body('userID').exists(),
     body('userID', 'This user ID does not exist').custom(async function (id) {
-        const user = await User.findAll({
-            where: { id },
-            limit: 1,
-        });
-        return (user.length === 1);
+        const user = await User.findByPk(id);
+        if (!user) throw Error;
     }),
 ], async (req, res) => {
     try {
@@ -86,14 +82,17 @@ app.post('/groups/:groupID/users/add', [
                 groupID: req.params.groupID,
                 userID: data.userID
             }
-        })
+        });
 
         await GroupsUsers.create({
             groupID: req.params.groupID,
             userID: data.userID,
-        })
+        });
 
-        return res.json(wrapper({ id: data.userID }))
+        return res.json({
+            groupID: req.params.groupID,
+            userID: data.userID
+        });
     } catch (error) {
         return errorHandler(error, res);
     }
@@ -115,7 +114,10 @@ app.delete('/groups/:groupID/users/:userID', [
             groupID: req.params.groupID,
             userID: req.params.userID,
         }
-    })
-    
-    return res.send(wrapper({ id: req.params.userID }))
+    });
+
+    return res.json({
+        userID: req.params.userID,
+        groupID: req.params.groupID
+    });
 });

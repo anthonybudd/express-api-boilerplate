@@ -14,7 +14,7 @@ describe('Auth', () => {
      * 
      */
     describe('GET /api/v1/_authcheck', () => {
-        it('Should check auth status', done => {
+        it('Should check auth status', (done) => {
             chai.request(server)
                 .post('/api/v1/auth/login')
                 .send({
@@ -26,17 +26,17 @@ describe('Auth', () => {
                     chai.request(server)
                         .get('/api/v1/_authcheck')
                         .set({
-                            'Authorization': `Bearer ${res.body.data.accessToken}`,
+                            'Authorization': `Bearer ${res.body.accessToken}`,
                         })
                         .end((err, res) => {
                             res.should.have.status(200);
-                            res.body.data.should.have.property('id');
+                            res.body.should.have.property('id');
                             done(err);
                         });
                 });
         });
 
-        it('Should check bad headers', done => {
+        it('Should check bad headers', (done) => {
             chai.request(server)
                 .get('/api/v1/_authcheck')
                 .set({
@@ -55,7 +55,7 @@ describe('Auth', () => {
      * 
      */
     describe('POST /api/v1/auth/login', () => {
-        it('Should return auth access token', done => {
+        it('Should return auth access token', (done) => {
             chai.request(server)
                 .post('/api/v1/auth/login')
                 .send({
@@ -65,13 +65,13 @@ describe('Auth', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.should.be.json;
-                    res.body.data.should.be.a('object');
-                    res.body.data.should.have.property('accessToken');
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('accessToken');
                     done(err);
                 });
         });
 
-        it('Should reject absent password', done => {
+        it('Should reject absent password', (done) => {
             chai.request(server)
                 .post('/api/v1/auth/login')
                 .send({
@@ -83,7 +83,7 @@ describe('Auth', () => {
                 });
         });
 
-        it('Should reject wrong password', done => {
+        it('Should reject wrong password', (done) => {
             chai.request(server)
                 .post('/api/v1/auth/login')
                 .send({
@@ -104,7 +104,7 @@ describe('Auth', () => {
      */
     describe('POST /api/v1/auth/sign-up', () => {
 
-        it('Should create a new user', done => {
+        it('Should create a new user', (done) => {
             chai.request(server)
                 .post('/api/v1/auth/sign-up')
                 .send({
@@ -118,13 +118,13 @@ describe('Auth', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.should.be.json;
-                    res.body.data.should.be.a('object');
-                    res.body.data.should.have.property('accessToken');
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('accessToken');
                     done(err);
                 });
         });
 
-        it('Should reject bad data', done => {
+        it('Should reject bad data', (done) => {
             chai.request(server)
                 .post('/api/v1/auth/sign-up')
                 .send({
@@ -137,7 +137,7 @@ describe('Auth', () => {
                 });
         });
 
-        it('Should reject bad email', done => {
+        it('Should reject bad email', (done) => {
             chai.request(server)
                 .post('/api/v1/auth/sign-up')
                 .send({
@@ -153,7 +153,7 @@ describe('Auth', () => {
                 });
         });
 
-        it('Should reject taken email', done => {
+        it('Should reject taken email', (done) => {
             chai.request(server)
                 .post('/api/v1/auth/sign-up')
                 .send({
@@ -169,7 +169,7 @@ describe('Auth', () => {
                 });
         });
 
-        it('Should reject bad password', done => {
+        it('Should reject bad password', (done) => {
             chai.request(server)
                 .post('/api/v1/auth/sign-up')
                 .send({

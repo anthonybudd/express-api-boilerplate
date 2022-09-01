@@ -24,8 +24,8 @@ describe('User', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.should.be.json;
-                    res.body.data.should.be.a('object');
-                    res.body.data.should.have.property('id');
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('id');
                     done();
                 });
         });
@@ -62,7 +62,7 @@ describe('User', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.should.be.json;
-                    res.body.data.should.be.a('object');
+                    res.body.should.be.a('object');
                     done();
                 });
         });
@@ -87,7 +87,7 @@ describe('User', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.should.be.json;
-                    res.body.data.should.be.a('object');
+                    res.body.should.be.a('object');
                     done();
                 });
         });

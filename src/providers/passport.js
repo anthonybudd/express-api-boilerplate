@@ -12,10 +12,10 @@ passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
 }, async (email, password, cb) => {
-    
+
     const user = await User.unscoped().findOne({
         where: { email },
-        include: [ Group ]
+        include: [Group]
     });
 
     if (!user) return cb(null, false, { message: 'Incorrect email or password.' });
