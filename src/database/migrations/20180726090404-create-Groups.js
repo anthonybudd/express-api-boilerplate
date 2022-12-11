@@ -2,13 +2,14 @@ module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.createTable('Groups', {
         id: {
             type: Sequelize.UUID,
+            defaultValue: Sequelize.UUIDV4,
             primaryKey: true,
             allowNull: false,
             unique: true
         },
 
-        name:              Sequelize.STRING,
-        ownerID:           Sequelize.UUID,
+        name: Sequelize.STRING,
+        ownerID: Sequelize.UUID,
 
         createdAt: {
             type: Sequelize.DATE,

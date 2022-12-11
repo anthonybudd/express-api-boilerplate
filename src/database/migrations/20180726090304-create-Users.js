@@ -2,6 +2,7 @@ module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.createTable('Users', {
         id: {
             type: Sequelize.UUID,
+            defaultValue: Sequelize.UUIDV4,
             primaryKey: true,
             allowNull: false,
             unique: true
@@ -16,7 +17,7 @@ module.exports = {
         password: Sequelize.STRING,
 
         firstName: Sequelize.STRING,
-        lastName: Sequelize.STRING,            
+        lastName: Sequelize.STRING,
         tos: Sequelize.STRING,
 
         lastLoginAt: {

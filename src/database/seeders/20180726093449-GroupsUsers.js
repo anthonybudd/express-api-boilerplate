@@ -1,14 +1,19 @@
-const insert = [    
+const moment = require('moment');
+
+const insert = [
     {
         userID: 'c4644733-deea-47d8-b35a-86f30ff9618e',
         groupID: 'fdab7a99-2c38-444b-bcb3-f7cef61c275b',
+        createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
     }, {
         userID: 'c4644733-deea-47d8-b35a-86f30ff9618e',
         groupID: 'be1fcb4e-caf9-41c2-ac27-c06fa24da36a',
+        createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
     }, {
         userID: 'd700932c-4a11-427f-9183-d6c4b69368f9',
         groupID: 'be1fcb4e-caf9-41c2-ac27-c06fa24da36a',
-    }   
+        createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+    }
 ];
 
 

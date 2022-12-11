@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt-nodejs');
+const moment = require('moment');
 const faker = require('faker');
 
 const insert = [{
@@ -8,6 +9,8 @@ const insert = [{
     firstName: 'Anthony',
     lastName: 'Budd',
     tos: '2021-12-19',
+    createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+    updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
 }, {
     id: 'd700932c-4a11-427f-9183-d6c4b69368f9',
     email: faker.internet.email(),
@@ -15,6 +18,8 @@ const insert = [{
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     tos: '2021-12-19',
+    createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+    updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
 }];
 
 
