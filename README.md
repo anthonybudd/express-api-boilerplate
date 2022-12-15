@@ -1,8 +1,6 @@
 # Express API Boilerplate
 A very simple REST API boilerplate using Express.js, Sequelize and MySQL.
 
-This project has been built using lessons learnt from over 5 years of building production REST APIs and has generated in excess of $10 million in revenue. 
-
 This project is designed to work with [AnthonyBudd/Vuetify-SPA-Boilerplate](https://github.com/anthonybudd/Vuetify-SPA-boilerplate)
 
 ### Set-up
