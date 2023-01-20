@@ -32,10 +32,6 @@ module.exports = {
             type: Sequelize.DATE,
             allowNull: true,
         },
-        deletedAt: {
-            type: Sequelize.DATE,
-            allowNull: true,
-        },
     }),
     down: (queryInterface, Sequelize) => queryInterface.dropTable('Users'),
 };

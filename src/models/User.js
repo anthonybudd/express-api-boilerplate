@@ -21,13 +21,8 @@ module.exports = db.define('user', {
         type: Sequelize.DATE,
         allowNull: true,
     },
-    deletedAt: {
-        type: Sequelize.DATE,
-        allowNull: true,
-    },
 }, {
     tableName: 'Users',
-    paranoid: true,
     defaultScope: {
         attributes: {
             exclude: [
