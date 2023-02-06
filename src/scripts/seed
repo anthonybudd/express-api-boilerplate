@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ $APP_ENV == "production" ]]
+if [[ $NODE_ENV == "production" ]]
   then
     echo "ERROR: Can not seed while in production"
   else

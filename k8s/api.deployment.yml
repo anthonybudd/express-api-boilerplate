@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: express-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: express-api
+  template:
+    metadata:
+      labels:
+        app: express-api
+    spec:
+      volumes:
+        - name: express-api-jwt-secret
+          secret:
+            secretName: express-api-jwt-secret
+      containers:
+        - name: express-api
+          image: registry.EXAMPLE.COM/express-api/express-api
+          ports:
+          - containerPort: 80
+          volumeMounts:
+          - name: express-api-jwt-secret
+            mountPath: "/app/private.pem"
+            subPath: private.pem
+          - name: express-api-jwt-secret
+            mountPath: "/app/public.pem"
+            subPath: public.pem
+          env:
+          - name: NODE_ENV
+            value: "production"
+          - name: BASE_URL
+            value: "https://api.EXAMPLE.COM/api/v1"
+          - name: PORT
+            value: "80"
+          - name: PRIVATE_KEY_PATH
+            value: "/app/private.pem"
+          - name: PUBLIC_KEY_PATH
+            value: "/app/public.pem"
+          - name: DB_HOST
+            value: "db.EXAMPLE.COM"
+          - name: DB_PORT
+            value: "3306"
+          - name: DB_USERNAME
+            value: "user"
+          - name: DB_DATABASE
+            value: "app"
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: express-api-secrets
+                key: DB_PASSWORD

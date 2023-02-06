@@ -3,7 +3,7 @@ const connections = require('./connections');
 const errorHandler = require('./errorHandler');
 
 
-const connection = (typeof global.it === 'function') ? 'test' : (process.env.APP_ENV || 'development');
+const connection = (typeof global.it === 'function') ? 'test' : (process.env.NODE_ENV || 'development');
 const dbHost = connections[connection].host;
 const dbPort = connections[connection].port;
 const dbName = connections[connection].database;

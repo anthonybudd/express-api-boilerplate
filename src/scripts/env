@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [[ $APP_ENV == "production" ]]
+if [[ $NODE_ENV == "production" ]]
   then
-    echo "APP_ENV=production ⚠️"
+    echo "NODE_ENV=production ⚠️"
   else
-    echo "APP_ENV=$APP_ENV"
+    echo "NODE_ENV=$NODE_ENV"
   fi

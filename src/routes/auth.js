@@ -64,7 +64,7 @@ app.post('/auth/login', [
  * 
  */
 app.post('/auth/sign-up', [
-    body('email', 'You must provide your email address').exists({ checkFalsy: true }).isEmail(),
+    body('email', 'You must provide your email address').exists({ checkFalsy: true }).isEmail().toLowerCase(),
     body('password', 'Your password must be atleast 7 characters long').isLength({ min: 7 }),
 
     // If user supplies an email and password that already exists, just attempt login.
@@ -135,7 +135,7 @@ app.post('/auth/sign-up', [
 
         await User.create({
             id: userID,
-            email: data.email.toLowerCase(),
+            email: data.email,
             password: bcrypt.hashSync(data.password, bcrypt.genSaltSync(10)),
             firstName: ucFirst(data.firstName),
             lastName: ucFirst(data.lastName),

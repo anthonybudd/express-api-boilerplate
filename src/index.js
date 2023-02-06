@@ -9,7 +9,7 @@ console.log('*************************************');
 console.log('* Express API Boilerplate');
 console.log('*');
 console.log('* ENV');
-console.log(`* APP_ENV: ${process.env.APP_ENV}`);
+console.log(`* NODE_ENV: ${process.env.NODE_ENV}`);
 console.log('*');
 console.log('*');
 
@@ -38,7 +38,7 @@ app.use('/api/v1/', require('./routes/groups'));
 
 
 ////////////////////////////////////////////////
-// Listens
+// Listen
 let port = process.env.PORT || 80;
 if (typeof global.it === 'function') port = 7777;
 app.listen(port, () => console.log(`* Listening: http://127.0.0.1:${port}`));
