@@ -1,5 +1,6 @@
 require('dotenv').config();
 require('./providers/passport');
+const fileUpload = require('express-fileupload');
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
@@ -10,6 +11,7 @@ console.log('* Express API Boilerplate');
 console.log('*');
 console.log('* ENV');
 console.log(`* NODE_ENV: ${process.env.NODE_ENV}`);
+console.log(`* TEMP_FILE_DIR: ${process.env.TEMP_FILE_DIR}`);
 console.log('*');
 console.log('*');
 
@@ -25,6 +27,12 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(fileUpload({
+    limits: { fileSize: 50 * 1024 * 1024 },
+    tempFileDir: process.env.TEMP_FILE_DIR,
+    useTempFiles: true,
+    parseNested: true,
+}));
 app.get('/_readiness', (req, res) => res.send('healthy'));
 app.get('/api/v1/_healthcheck', (req, res) => res.json({ status: 'ok' }));
 if (typeof global.it !== 'function') app.use(morgan('[:date[iso]] HTTP/:http-version :status :method :url :response-time ms'));

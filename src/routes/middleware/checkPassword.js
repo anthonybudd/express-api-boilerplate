@@ -3,13 +3,12 @@ const { User } = require('./../../models');
 const bcrypt = require('bcrypt-nodejs');
 
 module.exports = (req, res, next) => {
-
     if (!req.body.password) return res.status(422).json({
         errors: {
             components: {
-                location: "body",
-                param: "password",
-                msg: "Password must be provided"
+                location: 'body',
+                param: 'password',
+                msg: 'Password must be provided'
             }
         }
     });

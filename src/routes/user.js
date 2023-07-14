@@ -17,11 +17,13 @@ app.get('/user', [
     passport.authenticate('jwt', { session: false })
 ], async (req, res) => {
     try {
-        return res.json(
-            await User.findByPk(req.user.id, {
-                include: (req.query.with === 'groups') ? [Group] : [],
-            })
-        );
+        const user = await User.scope('InitalLoad').findByPk(req.user.id, {
+            include: [Group],
+        });
+
+        if (!user) return res.status(404).send('User not found');
+
+        return res.json(user);
     } catch (error) {
         errorHandler(error, res);
     }

@@ -1,8 +1,8 @@
 const LocalStrategy = require('passport-local').Strategy;
 const { User, Group } = require('./../models');
 const passportJWT = require('passport-jwt');
-const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
+const JWTStrategy = passportJWT.Strategy;
 const bcrypt = require('bcrypt-nodejs');
 const passport = require('passport');
 const fs = require('fs');
@@ -31,7 +31,10 @@ passport.use(new LocalStrategy({
 
 
 passport.use(new JWTStrategy({
-    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+    jwtFromRequest: ExtractJWT.fromExtractors([
+        ExtractJWT.fromAuthHeaderAsBearerToken(),
+        ExtractJWT.fromUrlQueryParameter('token'),
+    ]),
     secretOrKey: fs.readFileSync(process.env.PUBLIC_KEY_PATH, 'utf8'),
 }, (jwtPayload, cb) => cb(null, jwtPayload)));
 

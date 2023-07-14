@@ -19,6 +19,7 @@ module.exports = {
         firstName: Sequelize.STRING,
         lastName: Sequelize.STRING,
         tos: Sequelize.STRING,
+        passwordResetKey: Sequelize.STRING,
 
         lastLoginAt: {
             type: Sequelize.DATE,

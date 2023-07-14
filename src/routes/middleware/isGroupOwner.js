@@ -1,7 +1,6 @@
 const { Group } = require('./../../models');
 
 module.exports = async (req, res, next) => {
-
     const groupID = (req.params.groupID || req.body.groupID);
     const group = await Group.findByPk(groupID);
 

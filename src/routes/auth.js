@@ -27,10 +27,9 @@ app.get('/_authcheck', [
 /**
  * POST api/v1/auth/login
  * 
- * Login
  */
 app.post('/auth/login', [
-    body('email').exists(),
+    body('email').exists().toLowerCase(),
     body('password').exists(),
 ], async (req, res) => {
     const errors = validationResult(req);
@@ -48,7 +47,7 @@ app.post('/auth/login', [
             });
 
             User.update({
-                lastLoginAt: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+                lastLoginAt: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
             }, {
                 where: {
                     id: user.id
@@ -64,7 +63,9 @@ app.post('/auth/login', [
  * 
  */
 app.post('/auth/sign-up', [
-    body('email', 'You must provide your email address').exists({ checkFalsy: true }).isEmail().toLowerCase(),
+    body('email', 'You must provide your email address')
+        .isEmail()
+        .toLowerCase(),
     body('password', 'Your password must be atleast 7 characters long').isLength({ min: 7 }),
 
     // If user supplies an email and password that already exists, just attempt login.
@@ -103,10 +104,7 @@ app.post('/auth/sign-up', [
         }
     },
     body('email', 'This email address is taken').custom(async (email) => {
-        const user = await User.findOne({
-            where: { email },
-        });
-
+        const user = await User.findOne({ where: { email } });
         if (user) throw new Error('This email address is taken');
     }),
     body('firstName', 'You must provide your first name').exists(),
@@ -155,4 +153,101 @@ app.post('/auth/sign-up', [
     } catch (error) {
         return errorHandler(error, res);
     }
+});
+
+
+/**
+ * POST /api/v1/auth/forgot
+ * 
+ * Forgot Password
+ */
+app.post('/auth/forgot', [
+    body('email', 'You must provide a valid email address')
+        .isEmail()
+        .toLowerCase()
+        .custom(async (email) => {
+            const user = await User.findOne({ where: { email } });
+            if (!user) throw new Error('This email address does not exist');
+        }),
+], async (req, res) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(422).json({ errors: errors.mapped() });
+    const { email } = matchedData(req);
+
+    const user = await User.findOne({ where: { email } });
+    if (!user) throw new Error('Email address not found');
+
+    const passwordResetKey = crypto.randomBytes(32).toString('base64').replace(/[^a-zA-Z0-9+]/g, '');
+
+    await user.update({ passwordResetKey });
+
+    console.log(`\n\nEMAIL THIS TO THE USER\n${passwordResetKey}\n\n`);
+
+    return res.json({ success: true });
+});
+
+
+/**
+ * GET /api/v1/auth/get-user-by-reset-key/:passwordResetKey
+ * 
+ * Get users email
+ */
+app.get('/auth/get-user-by-reset-key/:passwordResetKey', async (req, res) => {
+    const user = await User.findOne({
+        where: {
+            passwordResetKey: req.params.passwordResetKey
+        },
+    });
+    if (!user) return res.status(404).send('Not found');
+
+    return res.json({
+        id: user.id,
+        email: user.email
+    });
+});
+
+
+/**1
+ * POST /api/v1/auth/reset
+ * 
+ * Update User's Password
+ */
+app.post('/auth/reset', [
+    body('email', 'You must provide a valid email address')
+        .isEmail()
+        .toLowerCase()
+        .custom(async (email) => {
+            const user = await User.findOne({ where: { email } });
+            if (!user) throw new Error('This email address does not exist');
+        }),
+    body('password').exists().isLength({ min: 7 }),
+    body('passwordResetKey', 'This link has expired')
+        .custom(async (passwordResetKey) => {
+            const user = await User.findOne({ where: { passwordResetKey } });
+            if (!user) throw new Error('This link has expired');
+        }),
+], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(422).json({ errors: errors.mapped() });
+    const { email, password, passwordResetKey } = matchedData(req);
+
+    const user = await User.findOne({
+        where: { email, passwordResetKey },
+        include: [Group],
+    });
+    if (!user) return res.status(404).send('Not found');
+
+    await user.update({
+        password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)),
+        passwordResetKey: null
+    });
+
+    return passport.authenticate('local', { session: false }, (err, user) => {
+        if (err) return errorHandler(err, res);
+        req.login(user, { session: false }, (err) => {
+            if (err) return errorHandler(err, res);
+            return res.json({ accessToken: generateJWT(user) });
+        });
+    })(req, res);
 });

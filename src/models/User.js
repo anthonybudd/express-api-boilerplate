@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('./../providers/db');
 
-module.exports = db.define('user', {
+module.exports = db.define('User', {
     id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -16,6 +16,7 @@ module.exports = db.define('user', {
     firstName: Sequelize.STRING,
     lastName: Sequelize.STRING,
     tos: Sequelize.STRING,
+    passwordResetKey: Sequelize.STRING,
 
     lastLoginAt: {
         type: Sequelize.DATE,
@@ -27,6 +28,7 @@ module.exports = db.define('user', {
         attributes: {
             exclude: [
                 'password',
+                'passwordResetKey',
             ]
         }
     },

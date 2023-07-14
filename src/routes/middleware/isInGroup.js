@@ -1,7 +1,6 @@
 const { User, Group } = require('./../../models');
 
 module.exports = async (req, res, next) => {
-
     const groupID = (req.params.groupID || req.body.groupID);
     const user = await User.findByPk(req.user.id, {
         include: [Group],
