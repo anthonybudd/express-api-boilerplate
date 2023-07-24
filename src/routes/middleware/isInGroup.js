@@ -5,7 +5,7 @@ module.exports = async (req, res, next) => {
     const user = await User.findByPk(req.user.id, {
         include: [Group],
     });
-    const groups = user.groups.map(({ id }) => (id));
+    const groups = user.Groups.map(({ id }) => (id));
 
     if (Array.isArray(groups) && groups.includes(groupID)) {
         return next();

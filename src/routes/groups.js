@@ -4,6 +4,7 @@ const errorHandler = require('./../providers/errorHandler');
 const middleware = require('./middleware');
 const passport = require('passport');
 const express = require('express');
+const crypto = require('crypto');
 
 const app = (module.exports = express.Router());
 
@@ -58,40 +59,71 @@ app.post('/groups/:groupID', [
 
 
 /**
- * POST /api/v1/groups/:groupID/users/add
+ * POST /api/v1/groups/:groupID/users/invite
  *
  */
-app.post('/groups/:groupID/users/add', [
+app.post('/groups/:groupID/users/invite', [
     passport.authenticate('jwt', { session: false }),
     middleware.isGroupOwner,
-    middleware.isNotSelf,
-    body('userID').exists(),
-    body('userID', 'This user ID does not exist').custom(async function (id) {
-        const user = await User.findByPk(id);
-        if (!user) throw Error;
-    }),
+    body('email').isEmail().toLowerCase(),
 ], async (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) return res.status(422).json({ errors: errors.mapped() });
-        const data = matchedData(req);
+        const { email } = matchedData(req);
+
+        const groupID = req.params.groupID;
+
+        let user = await User.findOne({
+            where: { email }
+        });
+
+        if (user) {
+            if (user.id === req.user.id) return res.status(401).json({
+                msg: 'You cannot add yourself to a group',
+                code: 98644,
+            });
+
+            // Check if relationship already exists
+            const relationship = await GroupsUsers.findOne({
+                where: {
+                    groupID,
+                    userID: user.id
+                }
+            });
+            if (relationship) return res.json({
+                groupID,
+                userID: user.id
+            });
+        } else {
+            try {
+                user = await User.create({
+                    email,
+                    inviteKey: crypto.randomBytes(20).toString('hex')
+                });
+
+                console.log(`\n\nEMAIL THIS TO THE USER\nINVITE LINK: ${process.env.FRONTEND_URL}/invite/${user.inviteKey}\n\n`);
+            } catch (error) {
+                errorHandler(error);
+            }
+        }
 
         // Delete all first
         await GroupsUsers.destroy({
             where: {
-                groupID: req.params.groupID,
-                userID: data.userID
+                groupID,
+                userID: user.id,
             }
         });
 
         await GroupsUsers.create({
-            groupID: req.params.groupID,
-            userID: data.userID,
+            groupID,
+            userID: user.id,
         });
 
         return res.json({
-            groupID: req.params.groupID,
-            userID: data.userID
+            groupID,
+            userID: user.id,
         });
     } catch (error) {
         return errorHandler(error, res);

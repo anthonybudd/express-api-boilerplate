@@ -17,7 +17,7 @@ app.get('/user', [
     passport.authenticate('jwt', { session: false })
 ], async (req, res) => {
     try {
-        const user = await User.scope('InitalLoad').findByPk(req.user.id, {
+        const user = await User.findByPk(req.user.id, {
             include: [Group],
         });
 
@@ -36,9 +36,9 @@ app.get('/user', [
  */
 app.post('/user', [
     passport.authenticate('jwt', { session: false }),
-    body('firstName'),
-    body('lastName'),
-    body('displayName'),
+    body('firstName').exists(),
+    body('lastName').exists(),
+    body('bio').exists(),
 ], async (req, res) => {
     try {
         const errors = validationResult(req);

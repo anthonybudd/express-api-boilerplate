@@ -7,6 +7,7 @@ const passport = require('passport');
 const express = require('express');
 const uuidv4 = require('uuid/v4');
 const moment = require('moment');
+const crypto = require('crypto');
 
 const app = (module.exports = express.Router());
 
@@ -63,54 +64,26 @@ app.post('/auth/login', [
  * 
  */
 app.post('/auth/sign-up', [
-    body('email', 'You must provide your email address')
+    body('email', 'This email address is taken')
         .isEmail()
-        .toLowerCase(),
-    body('password', 'Your password must be atleast 7 characters long').isLength({ min: 7 }),
-
-    // If user supplies an email and password that already exists, just attempt login.
-    async (req, res, next) => {
-        try {
-            const { email } = matchedData(req);
-            if (!email) return next();
-
-            const users = User.findAll({ where: { email } });
-            if (users.length !== 1) return next(); // Email does not exist, don't attempt a login
-
-            return passport.authenticate('local', { session: false }, (err, user) => {
-                if (err) return errorHandler(err, res);
-                if (!user) return next(); // Invalid login, Continue with sign-up attempt
-
-                req.login(user, { session: false }, async (err) => {
-                    if (err) return errorHandler(err, res);
-
-                    res.json({
-                        accessToken: generateJWT(user),
-                        userAlreadyHasAnAccount: true,
-                    });
-
-                    await User.update({
-                        lastLoginAt: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-                    }, {
-                        where: {
-                            id: user.id
-                        }
-                    });
-                });
-
-            })(req, res);
-        } catch (error) {
-            return errorHandler(error, res);
-        }
-    },
-    body('email', 'This email address is taken').custom(async (email) => {
-        const user = await User.findOne({ where: { email } });
-        if (user) throw new Error('This email address is taken');
-    }),
-    body('firstName', 'You must provide your first name').exists(),
-    body('lastName'),
-    body('groupName'),
-    body('tos', 'You must accept the Terms of Service to use this platform').exists(),
+        .trim()
+        .toLowerCase()
+        .custom(async (email) => {
+            const user = await User.findOne({ where: { email } });
+            if (user) throw new Error('This email address is taken');
+        }),
+    body('password', 'Your password must be atleast 7 characters long')
+        .isLength({ min: 7 }),
+    body('firstName', 'You must provide your first name')
+        .notEmpty()
+        .exists(),
+    body('lastName')
+        .optional(),
+    body('groupName')
+        .optional(),
+    body('tos', 'You must accept the Terms of Service to use this platform')
+        .exists()
+        .notEmpty(),
 ], async (req, res) => {
     try {
         const errors = validationResult(req);
@@ -178,11 +151,11 @@ app.post('/auth/forgot', [
     const user = await User.findOne({ where: { email } });
     if (!user) throw new Error('Email address not found');
 
-    const passwordResetKey = crypto.randomBytes(32).toString('base64').replace(/[^a-zA-Z0-9+]/g, '');
+    const passwordResetKey = crypto.randomBytes(32).toString('base64').replace(/[^a-zA-Z0-9]/g, '');
 
     await user.update({ passwordResetKey });
 
-    console.log(`\n\nEMAIL THIS TO THE USER\n${passwordResetKey}\n\n`);
+    console.log(`\n\nEMAIL THIS TO THE USER\nPASSWORD RESET LINK: ${process.env.FRONTEND_URL}/reset/${passwordResetKey}\n\n`);
 
     return res.json({ success: true });
 });
@@ -208,7 +181,7 @@ app.get('/auth/get-user-by-reset-key/:passwordResetKey', async (req, res) => {
 });
 
 
-/**1
+/**
  * POST /api/v1/auth/reset
  * 
  * Update User's Password
@@ -224,6 +197,7 @@ app.post('/auth/reset', [
     body('password').exists().isLength({ min: 7 }),
     body('passwordResetKey', 'This link has expired')
         .custom(async (passwordResetKey) => {
+            if (!passwordResetKey) throw new Error('This link has expired');
             const user = await User.findOne({ where: { passwordResetKey } });
             if (!user) throw new Error('This link has expired');
         }),
@@ -250,4 +224,72 @@ app.post('/auth/reset', [
             return res.json({ accessToken: generateJWT(user) });
         });
     })(req, res);
+});
+
+
+/**
+ * GET /api/v1/auth/get-user-by-invite-key/:inviteKey
+ * 
+ * Get users email
+ */
+app.get('/auth/get-user-by-invite-key/:inviteKey', async (req, res) => {
+    const user = await User.findOne({
+        where: {
+            inviteKey: req.params.inviteKey
+        },
+    });
+    if (!user) return res.status(404).send('Not found');
+
+    return res.json({
+        id: user.id,
+        email: user.email
+    });
+});
+
+
+/**
+ * POST /api/v1/auth/invite
+ * 
+ */
+app.post('/auth/invite', [
+    body('email', 'You must provide your email address')
+        .exists({ checkFalsy: true })
+        .isEmail()
+        .toLowerCase(),
+    body('password', 'Your password must be atleast 7 characters long')
+        .isLength({ min: 7 }),
+    body('firstName', 'You must provide your first name')
+        .exists(),
+    body('lastName'),
+    body('tos', 'You must accept the Terms of Service to use this platform')
+        .exists(),
+    body('inviteKey').exists(),
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) return res.status(422).json({ errors: errors.mapped() });
+        const data = matchedData(req);
+
+        const ucFirst = (string) => string.charAt(0).toUpperCase() + string.slice(1);
+        const user = await User.findOne({ where: { inviteKey: data.inviteKey } });
+        if (!user) return res.status(404).send('Not found');
+        await user.update({
+            password: bcrypt.hashSync(data.password, bcrypt.genSaltSync(10)),
+            firstName: ucFirst(data.firstName),
+            lastName: ucFirst(data.lastName),
+            lastLoginAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+            tos: data.tos,
+            inviteKey: null,
+        });
+
+        return passport.authenticate('local', { session: false }, (err, user) => {
+            if (err) return errorHandler(err, res);
+            req.login(user, { session: false }, (err) => {
+                if (err) return errorHandler(err, res);
+                return res.json({ accessToken: generateJWT(user) });
+            });
+        })(req, res);
+    } catch (error) {
+        return errorHandler(error, res);
+    }
 });

@@ -13,12 +13,14 @@ module.exports = {
             allowNull: false,
             unique: true
         },
-
         password: Sequelize.STRING,
 
         firstName: Sequelize.STRING,
         lastName: Sequelize.STRING,
+        bio: Sequelize.TEXT,
+
         tos: Sequelize.STRING,
+        inviteKey: Sequelize.STRING,
         passwordResetKey: Sequelize.STRING,
 
         lastLoginAt: {

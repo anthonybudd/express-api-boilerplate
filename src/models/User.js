@@ -10,12 +10,19 @@ module.exports = db.define('User', {
         unique: true
     },
 
-    email: Sequelize.STRING,
+    email: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true
+    },
     password: Sequelize.STRING,
 
     firstName: Sequelize.STRING,
     lastName: Sequelize.STRING,
+    bio: Sequelize.TEXT,
+
     tos: Sequelize.STRING,
+    inviteKey: Sequelize.STRING,
     passwordResetKey: Sequelize.STRING,
 
     lastLoginAt: {
