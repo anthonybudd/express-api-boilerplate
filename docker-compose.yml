@@ -19,7 +19,6 @@ services:
   express-api-db:
     image: mysql:oracle
     container_name: express-api-db
-    restart: always
     ports:
       - "3306:3306"
     volumes:
@@ -33,7 +32,6 @@ services:
   express-api-db-test:
     image: mysql:oracle
     container_name: express-api-db-test
-    restart: always
     ports:
       - "3307:3306"
     volumes:

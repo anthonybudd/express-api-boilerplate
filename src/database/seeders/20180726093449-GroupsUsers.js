@@ -11,7 +11,7 @@ const insert = [
         id: 'f4444505-cec7-4f91-948f-cdf3d4471c9e',
         userID: 'c4644733-deea-47d8-b35a-86f30ff9618e',
         groupID: 'be1fcb4e-caf9-41c2-ac27-c06fa24da36a',
-        createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        createdAt: moment().add(1, 'min').format('YYYY-MM-DD HH:mm:ss'),
     },
     {
         id: 'ed748a2d-453b-4bc8-b80d-bf1056e2b920',

@@ -99,7 +99,8 @@ app.post('/groups/:groupID/users/invite', [
             try {
                 user = await User.create({
                     email,
-                    inviteKey: crypto.randomBytes(20).toString('hex')
+                    inviteKey: crypto.randomBytes(20).toString('hex'),
+                    emailVerificationKey: crypto.randomBytes(20).toString('hex'),
                 });
 
                 console.log(`\n\nEMAIL THIS TO THE USER\nINVITE LINK: ${process.env.FRONTEND_URL}/invite/${user.inviteKey}\n\n`);

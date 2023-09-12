@@ -22,6 +22,12 @@ module.exports = {
         tos: Sequelize.STRING,
         inviteKey: Sequelize.STRING,
         passwordResetKey: Sequelize.STRING,
+        emailVerificationKey: Sequelize.STRING,
+        emailVerified: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false,
+            allowNull: false,
+        },
 
         lastLoginAt: {
             type: Sequelize.DATE,

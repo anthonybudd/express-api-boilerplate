@@ -31,7 +31,9 @@ spec:
           env:
           - name: NODE_ENV
             value: "production"
-          - name: BASE_URL
+          - name: FRONTEND_URL
+            value: "https://app.EXAMPLE.COM"
+          - name: BACKEND_URL
             value: "https://api.EXAMPLE.COM/api/v1"
           - name: PORT
             value: "80"

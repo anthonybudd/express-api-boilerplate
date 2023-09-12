@@ -104,15 +104,18 @@ app.post('/auth/sign-up', [
 
         await GroupsUsers.create({ userID, groupID });
 
-        await User.create({
+        const user = await User.create({
             id: userID,
             email: data.email,
             password: bcrypt.hashSync(data.password, bcrypt.genSaltSync(10)),
             firstName: ucFirst(data.firstName),
             lastName: ucFirst(data.lastName),
             lastLoginAt: moment().format("YYYY-MM-DD HH:mm:ss"),
-            tos: data.tos
+            tos: data.tos,
+            emailVerificationKey: crypto.randomBytes(20).toString('hex'),
         });
+
+        console.log(`\n\nEMAIL THIS TO THE USER\nEMAIL VERIFICATION LINK: ${process.env.FRONTEND_URL}/validate-email/${user.emailVerificationKey}\n\n`);
 
         return passport.authenticate('local', { session: false }, (err, user) => {
             if (err) return errorHandler(err, res);
@@ -126,6 +129,35 @@ app.post('/auth/sign-up', [
     } catch (error) {
         return errorHandler(error, res);
     }
+});
+
+
+/**
+ * GET /api/v1/auth/verify-email/:emailVerificationKey
+ * 
+ * Verify Email
+ */
+app.get('/auth/verify-email', [
+
+], async (req, res) => {
+
+    const user = await User.findOne({
+        where: {
+            emailVerificationKey: req.params.emailVerificationKey
+        }
+    });
+
+    if (!user) return res.status(404).json({
+        msg: 'User not found',
+        code: 40402
+    });
+
+    await user.update({
+        emailVerified: true,
+        emailVerificationKey: null,
+    });
+
+    return res.json({ success: true });
 });
 
 
@@ -149,7 +181,10 @@ app.post('/auth/forgot', [
     const { email } = matchedData(req);
 
     const user = await User.findOne({ where: { email } });
-    if (!user) throw new Error('Email address not found');
+    if (!user) return res.status(404).json({
+        msg: 'User not found',
+        code: 40401
+    });
 
     const passwordResetKey = crypto.randomBytes(32).toString('base64').replace(/[^a-zA-Z0-9]/g, '');
 
@@ -214,7 +249,7 @@ app.post('/auth/reset', [
 
     await user.update({
         password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)),
-        passwordResetKey: null
+        passwordResetKey: null,
     });
 
     return passport.authenticate('local', { session: false }, (err, user) => {
@@ -280,6 +315,8 @@ app.post('/auth/invite', [
             lastLoginAt: moment().format('YYYY-MM-DD HH:mm:ss'),
             tos: data.tos,
             inviteKey: null,
+            emailVerified: true,
+            emailVerificationKey: null,
         });
 
         return passport.authenticate('local', { session: false }, (err, user) => {

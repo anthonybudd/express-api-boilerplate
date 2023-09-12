@@ -5,6 +5,12 @@ module.exports = async (req, res, next) => {
     const user = await User.findByPk(req.user.id, {
         include: [Group],
     });
+
+    if (!user) return res.status(401).json({
+        msg: `User not found`,
+        code: 40120,
+    });
+
     const groups = user.Groups.map(({ id }) => (id));
 
     if (Array.isArray(groups) && groups.includes(groupID)) {

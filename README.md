@@ -25,6 +25,16 @@ npm run _db:refresh
 npm run _test
 ```
 
+### Commands
+| Command            | Description                   | Exmaple                          | 
+| ------------------ | ----------------------------- | -------------------------------- |
+| jwt                | Generate JWT for a user       | `docker exec -ti express-api node ./src/scripts/jwt.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e"` |
+| forgotPassword     | Generate password reset link  | `docker exec -ti express-api node ./src/scripts/forgotPassword.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e"` |
+| resetPassword      | Password user password        | `docker exec -ti express-api node ./src/scripts/resetPassword.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e" --password="password"` |
+| inviteUser         | Invite user to group          | `docker exec -ti express-api node ./src/scripts/inviteUser.js --email="newuser@example.com" --groupID="fdab7a99-2c38-444b-bcb3-f7cef61c275b"` |
+
+
+
 ### Routes
 | Method      | Route                                                    | Description                           | Payload                               | Response          | 
 | ----------- | -------------------------------------------------------- | ------------------------------------- | ------------------------------------- | ----------------- |  
@@ -34,6 +44,7 @@ npm run _test
 | **Auth**    |                                                          |                                       |                                       |                   |  
 | POST        | `/api/v1/auth/login`                                     | Login                                 | {email, password}                     | {accessToken}     |  
 | POST        | `/api/v1/auth/sign-up`                                   | Sign-up                               | {email, password, firstName, tos}     | {accessToken}     |  
+| GET         | `/api/v1/auth/verify-email/:emailVerificationKey`        | Verify Email                          | --                                    | {success: true}   |  
 | POST        | `/api/v1/auth/forgot`                                    | Forgot                                | {email}                               | {success: true}   |  
 | GET         | `/api/v1/auth/get-user-by-reset-key/:passwordResetKey`   | Get user for given `passwordResetKey` | --                                    | {id, email}       |  
 | POST        | `/api/v1/auth/reset`                                     | Reset Password                        | {email, password, passwordResetKey}   | {accessToken}     |  
@@ -51,10 +62,3 @@ npm run _test
 | POST        | `/api/v1/user/update-password`                           | Update password                       | {password, newPassword}               | {success: true}   |  
 
 
-### Commands
-| Command            | Description                   | Exmaple                          | 
-| ------------------ | ----------------------------- | -------------------------------- |
-| jwt                | Generate JWT for a user       | `docker exec -ti express-api node ./src/scripts/jwt.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e"` |
-| forgotPassword     | Generate password reset link  | `docker exec -ti express-api node ./src/scripts/forgotPassword.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e"` |
-| resetPassword      | Password user password        | `docker exec -ti express-api node ./src/scripts/resetPassword.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e" --password="password"` |
-| inviteUser         | Invite user to group          | `docker exec -ti express-api node ./src/scripts/inviteUser.js --email="newuser@example.com" --groupID="fdab7a99-2c38-444b-bcb3-f7cef61c275b"` |
