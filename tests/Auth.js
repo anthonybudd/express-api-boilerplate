@@ -19,7 +19,7 @@ describe('Auth', () => {
                 .post('/api/v1/auth/login')
                 .send({
                     email: 'user@example.com',
-                    password: 'password'
+                    password: 'Password@1234'
                 })
                 .end((err, res) => {
 
@@ -60,7 +60,7 @@ describe('Auth', () => {
                 .post('/api/v1/auth/login')
                 .send({
                     email: 'user@example.com',
-                    password: 'password'
+                    password: 'Password@1234'
                 })
                 .end((err, res) => {
                     res.should.have.status(200);
@@ -109,7 +109,7 @@ describe('Auth', () => {
                 .post('/api/v1/auth/sign-up')
                 .send({
                     email: faker.internet.email(),
-                    password: 'password',
+                    password: 'Password@1234',
                     firstName: faker.name.firstName(),
                     lastName: faker.name.lastName(),
                     groupName: faker.company.bsBuzz(),
