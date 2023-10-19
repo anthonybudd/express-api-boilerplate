@@ -1,9 +1,16 @@
 # Express API Boilerplate
-A very simple REST API boilerplate using Express.js, Sequelize and MySQL. 
 
-This is the boilerplate I start with whenever I build a SAAS application. This codebase has been used in multiple projects that generate over $10M per year.
+<img height="50" src="https://raw.githubusercontent.com/anthonybudd/anthonybudd/master/img/express-api-boilerplate.png?v=1"/>
+
+A very mimimal REST API boilerplate using Express.js, Sequelize and MySQL. 
 
 This project is designed to work with [AnthonyBudd/Vuetify-SPA-Boilerplate](https://github.com/anthonybudd/Vuetify-SPA-boilerplate)
+
+
+- 👥 Users, Groups and Roles
+- 🔐 Auth using JWT's with Passport.js
+- 🌐 Production-ready Kubernetes config files
+- 🥇 Real-world tested, generated over $20M in revenue
 
 ### Set-up
 ```sh
@@ -24,6 +31,8 @@ docker compose up
 npm run _db:refresh
 npm run _test
 ```
+### Deployment
+See [k8s/Deploy.md](./k8s/Deploy.md)
 
 ### Commands
 | Command            | Description                   | Exmaple                          | 
@@ -32,7 +41,6 @@ npm run _test
 | forgotPassword     | Generate password reset link  | `docker exec -ti express-api node ./src/scripts/forgotPassword.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e"` |
 | resetPassword      | Password user password        | `docker exec -ti express-api node ./src/scripts/resetPassword.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e" --password="password"` |
 | inviteUser         | Invite user to group          | `docker exec -ti express-api node ./src/scripts/inviteUser.js --email="newuser@example.com" --groupID="fdab7a99-2c38-444b-bcb3-f7cef61c275b"` |
-
 
 
 ### Routes
