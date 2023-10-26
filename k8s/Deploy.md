@@ -32,17 +32,22 @@ Create the secrets
 `kubectl --kubeconfig=./kubeconfig.yml apply -f ./k8s/secrets.yml`
 
 
-### Build & Push The Container
+### Build & Push Container Image
 ```
-docker buildx build --platform linux/amd64 --push -t registry.digitalocean.com/express-api/app:latest . && 
-kubectl --kubeconfig=./kubeconfig.yml rollout restart deployment express-api && \
-kubectl --kubeconfig=./kubeconfig.yml get pods -w
+docker buildx build --platform linux/amd64 --push -t registry.digitalocean.com/express-api/app:latest
 ```
 
 ### Create Deployment
 ```
 kubectl --kubeconfig=./kubeconfig.yml apply -f ./k8s/api.deployment.yml
-kubectl --kubeconfig=./kubeconfig.yml --namespace=express-api rollout restart deployment express-api 
+kubectl --kubeconfig=./kubeconfig.yml apply -f ./k8s/api.service.yml
+```
+
+### Deploy
+```
+docker buildx build --platform linux/amd64 --push -t registry.digitalocean.com/express-api/app:latest . && 
+kubectl --kubeconfig=./kubeconfig.yml rollout restart deployment express-api && \
+kubectl --kubeconfig=./kubeconfig.yml get pods -w
 ```
 
 

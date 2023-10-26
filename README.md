@@ -9,7 +9,7 @@ This project is designed to work with [AnthonyBudd/Vuetify-SPA-Boilerplate](http
 
 - 👥 Users, Groups and Roles
 - 🔐 Auth using JWT's with Passport.js
-- 🌐 Production-ready Kubernetes config files
+- 🌐 Production-ready [Kubernetes config files](./k8s)
 - 🥇 Real-world tested, generated over $20M in revenue
 
 ### Set-up
@@ -33,6 +33,24 @@ npm run _test
 ```
 ### Deployment
 See [k8s/Deploy.md](./k8s/Deploy.md)
+
+### DB Structure
+The DB structure is the optimum balance of functionality and minimalism. A User can belong to many Groups through the GroupsUsers table. This allows you to make very basic single-user applications that do not even require the concept of groups or full SaaS solutions with complex User-Group relationships.
+
+```                                                                
++--------------+           +---------------+         +--------------+  
+|Users         |---------∈ |GroupsUsers    | ∋-------|Groups        |  
+|--------------|           |---------------|         |--------------|  
+|id            |           |id             |         |id            |  
+|email         |           |groupID        |         |name          |  
+|password      |           |userID         |         |ownerID       |  
+|firstName     |           |createdAt      |         |createdAt     |  
+|lastName      |           |               |         |updatedAt     |  
+|createdAt     |           |               |         |              |  
+|updatedAt     |           |               |         |              |  
+|...           |           |               |         |              |  
++--------------+           +---------------+         +--------------+  
+```
 
 ### Commands
 | Command            | Description                   | Exmaple                          | 

@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: express-api
+  namespace: express-api
 spec:
   ports:
   - port: 80
