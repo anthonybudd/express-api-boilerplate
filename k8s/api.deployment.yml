@@ -20,6 +20,10 @@ spec:
       containers:
         - name: express-api
           image: registry.EXAMPLE.COM/express-api/express-api
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/bash", "-c", "sequelize db:migrate"]
           ports:
           - containerPort: 80
           volumeMounts:
