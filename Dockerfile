@@ -1,7 +1,5 @@
 FROM node:20
 
-RUN apt-get install -y imagemagick ghostscript
-
 RUN npm install -g nodemon mocha sequelize sequelize-cli mysql2 eslint
 
 WORKDIR /app
