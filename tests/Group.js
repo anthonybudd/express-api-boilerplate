@@ -9,7 +9,20 @@ chai.use(chaiHttp);
 const GROUP_ID = 'fdab7a99-2c38-444b-bcb3-f7cef61c275b';
 const OTHER_GROUP_ID = '190c8a70-34d1-4281-a775-850058453704';
 
+let accessToken;
+
 describe('Groups', () => {
+
+    before('Groups', async () => {
+        const { body } = await chai.request(server)
+            .post('/api/v1/auth/login')
+            .set('Accept', 'application/json')
+            .send({
+                email: process.env.TEST_EMAIL,
+                password: process.env.TEST_PASSWORD,
+            });
+        accessToken = body.accessToken;
+    });
 
     /**
      * GET  /api/v1/groups/:groupID
@@ -21,7 +34,7 @@ describe('Groups', () => {
             chai.request(server)
                 .get(`/api/v1/groups/${GROUP_ID}`)
                 .set({
-                    'Authorization': `Bearer ${process.env.TEST_JWT}`,
+                    'Authorization': `Bearer ${accessToken}`,
                 })
                 .end((err, res) => {
                     res.should.have.status(200);
@@ -37,7 +50,7 @@ describe('Groups', () => {
             chai.request(server)
                 .get(`/api/v1/groups/${OTHER_GROUP_ID}`)
                 .set({
-                    'Authorization': `Bearer ${process.env.TEST_JWT}`,
+                    'Authorization': `Bearer ${accessToken}`,
                 })
                 .end((err, res) => {
                     res.should.have.status(401);
@@ -57,7 +70,7 @@ describe('Groups', () => {
             chai.request(server)
                 .post(`/api/v1/groups/${GROUP_ID}`)
                 .set({
-                    'Authorization': `Bearer ${process.env.TEST_JWT}`,
+                    'Authorization': `Bearer ${accessToken}`,
                 })
                 .send({
                     name: 'Test Group'
@@ -77,7 +90,7 @@ describe('Groups', () => {
             chai.request(server)
                 .post(`/api/v1/groups/${OTHER_GROUP_ID}`)
                 .set({
-                    'Authorization': `Bearer ${process.env.TEST_JWT}`,
+                    'Authorization': `Bearer ${accessToken}`,
                 })
                 .send({
                     name: 'Test Group'
@@ -91,18 +104,18 @@ describe('Groups', () => {
 
 
     /**
-     * POST  /api/v1/groups/:groupID/users/add
+     * POST  /api/v1/groups/:groupID/users/invite
      * 
      */
-    describe('POST  /api/v1/groups/:groupID/users/add', () => {
-        it('Should add user to the group', done => {
+    describe('POST  /api/v1/groups/:groupID/users/invite', () => {
+        it('Should invite user to the group', done => {
             chai.request(server)
-                .post(`/api/v1/groups/${GROUP_ID}/users/add`)
+                .post(`/api/v1/groups/${GROUP_ID}/users/invite`)
                 .set({
-                    'Authorization': `Bearer ${process.env.TEST_JWT}`,
+                    'Authorization': `Bearer ${accessToken}`,
                 })
                 .send({
-                    userID: 'd700932c-4a11-427f-9183-d6c4b69368f9',
+                    email: 'johnsmith@foobar.net',
                 })
                 .end((err, res) => {
                     res.should.have.status(200);
@@ -110,21 +123,6 @@ describe('Groups', () => {
                     res.body.should.be.a('object');
                     res.body.should.have.property('userID');
                     res.body.should.have.property('groupID');
-                    done();
-                });
-        });
-
-        it('Should reject bad userID', done => {
-            chai.request(server)
-                .post(`/api/v1/groups/${GROUP_ID}/users/add`)
-                .set({
-                    'Authorization': `Bearer ${process.env.TEST_JWT}`,
-                })
-                .send({
-                    userID: '00000000-0000-0000-0000-000000000000',
-                })
-                .end((err, res) => {
-                    res.should.have.status(422);
                     done();
                 });
         });
@@ -140,7 +138,7 @@ describe('Groups', () => {
             chai.request(server)
                 .delete(`/api/v1/groups/${GROUP_ID}/users/d700932c-4a11-427f-9183-d6c4b69368f9`)
                 .set({
-                    'Authorization': `Bearer ${process.env.TEST_JWT}`,
+                    'Authorization': `Bearer ${accessToken}`,
                 })
                 .end((err, res) => {
                     res.should.have.status(200);

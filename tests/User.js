@@ -6,8 +6,22 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 
+let accessToken;
+
 
 describe('User', () => {
+
+    before('User', async () => {
+        const { body } = await chai.request(server)
+            .post('/api/v1/auth/login')
+            .set('Accept', 'application/json')
+            .send({
+                email: process.env.TEST_EMAIL,
+                password: process.env.TEST_PASSWORD,
+            });
+        accessToken = body.accessToken;
+    });
+
 
     /**
      * GET  /api/v1/user
@@ -15,11 +29,12 @@ describe('User', () => {
      */
     describe('GET  /api/v1/user', () => {
 
+
         it('Should return the user model', done => {
             chai.request(server)
                 .get('/api/v1/user')
                 .set({
-                    'Authorization': `Bearer ${process.env.TEST_JWT}`,
+                    'Authorization': `Bearer ${accessToken}`,
                 })
                 .end((err, res) => {
                     res.should.have.status(200);
@@ -53,11 +68,12 @@ describe('User', () => {
             chai.request(server)
                 .post('/api/v1/user')
                 .set({
-                    'Authorization': `Bearer ${process.env.TEST_JWT}`,
+                    'Authorization': `Bearer ${accessToken}`,
                 })
                 .send({
                     firstName: 'John',
-                    lastName: 'Smith'
+                    lastName: 'Smith',
+                    bio: 'I am a developer',
                 })
                 .end((err, res) => {
                     res.should.have.status(200);
@@ -78,11 +94,11 @@ describe('User', () => {
             chai.request(server)
                 .post('/api/v1/user/update-password')
                 .set({
-                    'Authorization': `Bearer ${process.env.TEST_JWT}`,
+                    'Authorization': `Bearer ${accessToken}`,
                 })
                 .send({
-                    password: 'password',
-                    newPassword: 'newpassword'
+                    password: 'Password@1234',
+                    newPassword: 'newpassword@5678'
                 })
                 .end((err, res) => {
                     res.should.have.status(200);

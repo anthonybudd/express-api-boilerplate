@@ -115,7 +115,13 @@ app.post('/auth/sign-up', [
             emailVerificationKey: crypto.randomBytes(20).toString('hex'),
         });
 
-        console.log(`\n\nEMAIL THIS TO THE USER\nEMAIL VERIFICATION LINK: ${process.env.FRONTEND_URL}/validate-email/${user.emailVerificationKey}\n\n`);
+        //////////////////////////////////////////
+        // EMAIL THIS TO THE USER
+        const emailVerificationLink = `${process.env.FRONTEND_URL}/validate-email/${user.emailVerificationKey}`;
+        if (typeof global.it !== 'function') console.log(`\n\nEMAIL THIS TO THE USER\nEMAIL VERIFICATION LINK: ${emailVerificationLink}\n\n`);
+        //
+        //////////////////////////////////////////
+
 
         return passport.authenticate('local', { session: false }, (err, user) => {
             if (err) return errorHandler(err, res);
@@ -188,7 +194,12 @@ app.post('/auth/forgot', [
 
     await user.update({ passwordResetKey });
 
-    console.log(`\n\nEMAIL THIS TO THE USER\nPASSWORD RESET LINK: ${process.env.FRONTEND_URL}/reset/${passwordResetKey}\n\n`);
+    //////////////////////////////////////////
+    // EMAIL THIS TO THE USER
+    const passwordResetLink = `${process.env.FRONTEND_URL}/reset/${passwordResetKey}`;
+    if (typeof global.it !== 'function') console.log(`\n\nEMAIL THIS TO THE USER\nPASSWORD RESET LINK: ${passwordResetLink}\n\n`);
+    //
+    //////////////////////////////////////////
 
     return res.json({ success: true });
 });

@@ -1,0 +1,32 @@
+###########################################
+# {{ModelName}}
+
+### GET /{{ modelnames }}
+GET {{Host}}/{{ modelnames }}
+Authorization: Bearer {{AccessToken}}
+
+### GET /{{ modelnames }}/:{{ modelName }}ID
+GET {{Host}}/{{ modelnames }}/:{{ modelName }}ID
+Authorization: Bearer {{AccessToken}}
+
+### POST /{{ modelnames }}
+POST {{Host}}/{{ modelnames }}
+Authorization: Bearer {{AccessToken}}
+content-type: application/json
+
+{
+    "field": "foo"
+}
+
+### POST /{{ modelnames }}/:{{ modelName }}ID
+POST {{Host}}/{{ modelnames }}/:{{ modelName }}ID
+Authorization: Bearer {{AccessToken}}
+content-type: application/json
+
+{
+    "field": "bar"
+}
+
+### DELETE /{{ modelnames }}/:{{ modelName }}ID
+DELETE {{Host}}/{{ modelnames }}/:{{ modelName }}ID
+Authorization: Bearer {{AccessToken}}

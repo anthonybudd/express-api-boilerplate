@@ -18,8 +18,8 @@ describe('Auth', () => {
             chai.request(server)
                 .post('/api/v1/auth/login')
                 .send({
-                    email: 'user@example.com',
-                    password: 'Password@1234'
+                    email: process.env.TEST_EMAIL,
+                    password: process.env.TEST_PASSWORD,
                 })
                 .end((err, res) => {
 
@@ -59,8 +59,8 @@ describe('Auth', () => {
             chai.request(server)
                 .post('/api/v1/auth/login')
                 .send({
-                    email: 'user@example.com',
-                    password: 'Password@1234'
+                    email: process.env.TEST_EMAIL,
+                    password: process.env.TEST_PASSWORD,
                 })
                 .end((err, res) => {
                     res.should.have.status(200);

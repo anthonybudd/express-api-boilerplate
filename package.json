@@ -15,8 +15,11 @@
         "db:refresh": "./src/scripts/refresh",
         "_db:refresh": "docker exec -ti express-api npm run db:refresh",
         "db:refresh-test": "node_modules/.bin/sequelize db:migrate:undo:all --env test && node_modules/.bin/sequelize db:migrate --env test && node_modules/.bin/sequelize db:seed:all --env test",
+        "generate": "node ./src/scripts/generate.js",
         "test": "npm run db:refresh-test && mocha --exit --timeout 10000 tests",
-        "_test": "docker exec -ti express-api npm run test"
+        "_test": "docker exec -ti express-api npm run test",
+        "t": "mocha --exit --timeout 10000 tests",
+        "_t": "docker exec -ti express-api npm run t"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",

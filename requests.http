@@ -1,0 +1,21 @@
+# Install VS Code extension rest-client 
+# URL: https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+@Host=http://localhost:8888/api/v1
+@AccessToken=eyJ0....
+
+###########################################
+# Auth
+
+POST {{Host}}/auth/login
+content-type: application/json
+
+{
+    "email": "user@example.com",
+    "password": "Password@1234"
+}
+
+### Check auth
+GET {{Host}}/_authcheck
+Authorization: Bearer {{AccessToken}}
+

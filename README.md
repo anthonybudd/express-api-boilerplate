@@ -10,7 +10,7 @@ This project is designed to work with [AnthonyBudd/Vuetify-SPA-Boilerplate](http
 - 👥 Users, Groups and Roles
 - 🔐 Auth using JWT's with Passport.js
 - 🌐 Production-ready [Kubernetes config files](./k8s)
-- 🥇 Real-world tested, generated over $20M in revenue
+- 🥇 Real-world tested, generated over $50M in revenue
 
 ### Set-up
 ```sh
@@ -29,6 +29,9 @@ openssl rsa -in private.pem -outform PEM -pubout -out public.pem
 # Start the app
 docker compose up
 npm run _db:refresh
+npm run _test
+
+npm run generate -- --modelName="book"
 npm run _test
 ```
 ### Deployment
@@ -52,13 +55,18 @@ The DB structure is the optimum balance of functionality and minimalism. A User 
 +--------------+           +---------------+         +--------------+  
 ```
 
+### Code Generation
+There is a very rudimentary code generation system that will create 5 files model, migration, route, seeder and a test.
+
 ### Commands
 | Command            | Description                   | Exmaple                          | 
 | ------------------ | ----------------------------- | -------------------------------- |
+| generate           | Code generation               | `docker exec -ti express-api node ./src/scripts/generate.js --modelName="bucket"` |
 | jwt                | Generate JWT for a user       | `docker exec -ti express-api node ./src/scripts/jwt.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e"` |
 | forgotPassword     | Generate password reset link  | `docker exec -ti express-api node ./src/scripts/forgotPassword.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e"` |
 | resetPassword      | Password user password        | `docker exec -ti express-api node ./src/scripts/resetPassword.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e" --password="password"` |
 | inviteUser         | Invite user to group          | `docker exec -ti express-api node ./src/scripts/inviteUser.js --email="newuser@example.com" --groupID="fdab7a99-2c38-444b-bcb3-f7cef61c275b"` |
+
 
 
 ### Routes

@@ -103,7 +103,13 @@ app.post('/groups/:groupID/users/invite', [
                     emailVerificationKey: crypto.randomBytes(20).toString('hex'),
                 });
 
-                console.log(`\n\nEMAIL THIS TO THE USER\nINVITE LINK: ${process.env.FRONTEND_URL}/invite/${user.inviteKey}\n\n`);
+                //////////////////////////////////////////
+                // EMAIL THIS TO THE USER
+                const inviteLink = `${process.env.FRONTEND_URL}/invite/${user.inviteKey}`;
+                if (typeof global.it !== 'function') console.log(`\n\nEMAIL THIS TO THE USER\nINVITE LINK: ${inviteLink}\n\n`);
+                //
+                //////////////////////////////////////////
+
             } catch (error) {
                 errorHandler(error);
             }

@@ -19,4 +19,15 @@ describe('DevOps', () => {
                 });
         });
     });
+
+    describe('GET  /_readiness', () => {
+        it('Kubernetes readiness check', (done) => {
+            chai.request(server)
+                .get('/_readiness')
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    done();
+                });
+        });
+    });
 });

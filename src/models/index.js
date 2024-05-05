@@ -18,5 +18,5 @@ Group.belongsToMany(User, {
 module.exports = {
     User,
     Group,
-    GroupsUsers
+    GroupsUsers,
 };
