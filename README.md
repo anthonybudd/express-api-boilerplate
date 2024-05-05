@@ -31,6 +31,7 @@ docker compose up
 npm run _db:refresh
 npm run _test
 
+# Code Generation
 npm run generate -- --modelName="book"
 npm run _test
 ```

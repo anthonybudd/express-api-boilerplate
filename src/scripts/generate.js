@@ -27,10 +27,6 @@ if (!argv['modelName']) throw Error('You must provide --modelName argument');
         modelNames: argv['modelName'].concat('s'),
         ModelNames: ucFirst(argv['modelName']).concat('s'),
         UUID: uuidv4(),
-
-        // requests.http
-        Host: '{{Host}}',
-        AccessToken: '{{AccessToken}}',
     };
 
     if (argv['v']) console.log(params);
@@ -128,15 +124,15 @@ if (!argv['modelName']) throw Error('You must provide --modelName argument');
     console.log(`Created: ${pathTest}`);
 
 
-    // ////////////////////////////////////////////////
-    // // Requests
-    // const pathRequests = path.resolve(`./requests.http`);
-    // const requestContent = fs.readFileSync(pathRequests, 'utf8');
-    // const newRequest = Mustache.render(fs.readFileSync(path.resolve('./src/scripts/generator/requests.http'), 'utf8'), params);
-    // if (!requestContent.includes(`### ${params.ModelName}`)) {
-    //     fs.writeFileSync(pathRequests, requestContent + '\n' + newRequest);
-    //     console.log(`Updated: ${pathRequests}`);
-    // }
+    ////////////////////////////////////////////////
+    // Requests
+    const pathRequests = path.resolve(`./requests.http`);
+    const requestContent = fs.readFileSync(pathRequests, 'utf8');
+    const newRequest = Mustache.render(fs.readFileSync(path.resolve('./src/scripts/generator/requests.http'), 'utf8'), params);
+    if (!requestContent.includes(`### ${params.ModelName}`)) {
+        fs.writeFileSync(pathRequests, requestContent + '\n' + newRequest);
+        console.log(`Updated: ${pathRequests}`);
+    }
 })();
 
 

@@ -2,7 +2,7 @@
 # URL: https://marketplace.visualstudio.com/items?itemName=humao.rest-client
 
 @Host=http://localhost:8888/api/v1
-@AccessToken=eyJ0....
+@AccessToken=eyJ0e...
 
 ###########################################
 # Auth

@@ -53,7 +53,7 @@ describe('{{ ModelNames }}', () => {
 
         it('Should return single {{ ModelName }}', (done) => {
             chai.request(server)
-                .get(`/api/v1/{{ modelnames }}/${{{{ MODELNAME }}}_ID}`)
+                .get(`/api/v1/{{ modelnames }}/${ {{{ MODELNAME }}}_ID}`)
                 .set({
                     'Authorization': `Bearer ${ accessToken }`,
                 })
@@ -102,19 +102,19 @@ describe('{{ ModelNames }}', () => {
         it('Should invite user to the group', done => {
             chai.request(server)
                 .post(`/api/v1/{{ modelnames }}/${ {{{ MODELNAME }}}_ID}`)
-    .set({
-        'Authorization': `Bearer ${accessToken}`,
-    })
-    .send({
-        field: 'bar',
-    })
-    .end((err, res) => {
-        res.should.have.status(200);
-        res.should.be.json;
-        res.body.should.be.a('object');
-        res.body.should.have.property('id');
-        done();
-    });
+                .set({
+                    'Authorization': `Bearer ${accessToken}`,
+                })
+                .send({
+                    field: 'bar',
+                })
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.should.be.json;
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('id');
+                    done();
+                });
         });
     });
 
@@ -126,17 +126,28 @@ describe('{{ ModelNames }}', () => {
 describe('DELETE /api/v1/{{ modelnames }}/:{{ modelName }}ID', () => {
     it('Should delete the {{ ModelName }}', done => {
         chai.request(server)
-            .delete(`/api/v1/{{ modelnames }}/${{{{ MODELNAME }}}_ID}`)
+                .post(`/api/v1/{{ modelnames }}`)
                 .set({
                     'Authorization': `Bearer ${ accessToken }`,
                 })
+                .send({
+                    field: 'foo'
+                })
                 .end((err, res) => {
-                    res.should.have.status(200);
-                    res.should.be.json;
-                    res.body.should.be.a('object');
-                    res.body.should.have.property('id');
-                    done();
-                });
+
+                    chai.request(server)
+                        .delete(`/api/v1/{{ modelnames }}/${res.body.id}`)
+                            .set({
+                                'Authorization': `Bearer ${ accessToken }`,
+                            })
+                            .end((err, res) => {
+                                res.should.have.status(200);
+                                res.should.be.json;
+                                res.body.should.be.a('object');
+                                res.body.should.have.property('id');
+                                done();
+                            });
+                });    
         });
     });
-});;;
+});
