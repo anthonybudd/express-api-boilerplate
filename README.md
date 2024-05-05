@@ -58,7 +58,7 @@ npm run generate -- --modelName="book"
 
 
 ### Generate SDK Client Libraries
-There is an [OpenAPISpec](./OpenApiSpec.yml) in the root of the repo. The project includes code generation config files for PHP, JavaScript and Swift. Use the below command to generate SDK Client Libraries for your API. A full list of supported langauages [can be found here](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#overview)
+There is an [OpenAPISpec](./OpenApiSpec.yml) in the root of the repo. The project includes code generation config files for PHP, JavaScript and Swift. Use the below command to generate SDK Client Libraries for your API to `/sdk/dist`. A full list of supported langauages [can be found here](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#overview)
 
 
 ```sh
@@ -73,7 +73,7 @@ The DB structure is the optimum balance of functionality and minimalism. A User 
 
 ```                                                                
 +--------------+           +---------------+         +--------------+  
-|Users         | --------∈ |GroupsUsers    | ∋------|Groups        |  
+|Users         | --------∈ |GroupsUsers    | ∋------ |Groups        |  
 |--------------|           |---------------|         |--------------|  
 |id            |           |id             |         |id            |  
 |email         |           |groupID        |         |name          |  
