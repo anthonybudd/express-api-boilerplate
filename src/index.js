@@ -40,9 +40,9 @@ if (typeof global.it !== 'function') app.use(morgan('[:date[iso]] HTTP/:http-ver
 
 ////////////////////////////////////////////////
 // HTTP
-app.use('/api/v1/', require('./routes/auth'));
-app.use('/api/v1/', require('./routes/user'));
-app.use('/api/v1/', require('./routes/groups'));
+app.use('/api/v1/', require('./routes/Auth'));
+app.use('/api/v1/', require('./routes/User'));
+app.use('/api/v1/', require('./routes/Groups'));
 
 
 ////////////////////////////////////////////////
