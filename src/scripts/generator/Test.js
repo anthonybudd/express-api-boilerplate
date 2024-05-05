@@ -99,7 +99,7 @@ describe('{{ ModelNames }}', () => {
      * 
      */
     describe('POST /api/v1/{{ modelnames }}/:{{ modelName }}ID', () => {
-        it('Should invite user to the group', done => {
+        it('Should update the {{ ModelName }}', done => {
             chai.request(server)
                 .post(`/api/v1/{{ modelnames }}/${ {{{ MODELNAME }}}_ID}`)
                 .set({

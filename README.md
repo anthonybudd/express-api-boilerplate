@@ -1,6 +1,6 @@
 # Express API Boilerplate
 
-<img height="50" src="https://raw.githubusercontent.com/anthonybudd/anthonybudd/master/img/express-api-boilerplate.png?v=1"/>
+<img height="75" src="https://raw.githubusercontent.com/anthonybudd/anthonybudd/master/img/express-api-boilerplate.png?v=1"/>
 
 A very mimimal REST API boilerplate using Express.js, Sequelize and MySQL. 
 
@@ -57,12 +57,16 @@ The DB structure is the optimum balance of functionality and minimalism. A User 
 ```
 
 ### Code Generation
-There is a very rudimentary code generation system that will create 5 files model, migration, route, seeder and a test.
+There is a very rudimentary code generation script that will create 5 files for you; a model, migration, route, seeder and a test.
+
+```sh
+npm run generate -- --modelName="book"
+```
 
 ### Commands
 | Command            | Description                   | Exmaple                          | 
 | ------------------ | ----------------------------- | -------------------------------- |
-| generate           | Code generation               | `docker exec -ti express-api node ./src/scripts/generate.js --modelName="bucket"` |
+| generate           | Code generation               | `npm run generate -- --modelName="book"` |
 | jwt                | Generate JWT for a user       | `docker exec -ti express-api node ./src/scripts/jwt.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e"` |
 | forgotPassword     | Generate password reset link  | `docker exec -ti express-api node ./src/scripts/forgotPassword.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e"` |
 | resetPassword      | Password user password        | `docker exec -ti express-api node ./src/scripts/resetPassword.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e" --password="password"` |
