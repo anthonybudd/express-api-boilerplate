@@ -1,0 +1,9 @@
+'!include': '../common.yaml'
+outputDir: /app/sdk/dist/php
+generatorName: php
+additionalProperties:
+  modelPackage: ExpressAPIBoilerplate
+  packageName: ExpressAPIBoilerplate
+  apiPackage: ExpressAPIBoilerplate
+  composerPackageName: ExpressAPIBoilerplate
+  invokerPackage: ExpressAPIBoilerplate

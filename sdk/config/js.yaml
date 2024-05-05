@@ -1,0 +1,3 @@
+'!include': '../common.yaml'
+outputDir: /app/sdk/dist/js
+generatorName: javascript

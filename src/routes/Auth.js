@@ -143,7 +143,7 @@ app.post('/auth/sign-up', [
  * 
  * Verify Email
  */
-app.get('/auth/verify-email', async (req, res) => {
+app.get('/auth/verify-email/:emailVerificationKey', async (req, res) => {
 
     const user = await User.findOne({
         where: {
@@ -161,7 +161,7 @@ app.get('/auth/verify-email', async (req, res) => {
         emailVerificationKey: null,
     });
 
-    return res.json({ success: true });
+    return res.json({ id: user.id });
 });
 
 

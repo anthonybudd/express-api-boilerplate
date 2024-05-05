@@ -36,25 +36,18 @@ npm run generate -- --modelName="book"
 npm run _test
 ```
 ### Deployment
-See [k8s/Deploy.md](./k8s/Deploy.md)
+Full Kubernetes deployment instructions can be found at [k8s/Deploy.md](./k8s/Deploy.md).
 
-### DB Structure
-The DB structure is the optimum balance of functionality and minimalism. A User can belong to many Groups through the GroupsUsers table. This allows you to make very basic single-user applications that do not even require the concept of groups or full SaaS solutions with complex User-Group relationships.
+- [api.deployment.yml](./k8s/api.deployment.yml)
+- [api.ingress.yml](./k8s/api.ingress.yml)
+- [api.service.yml](./k8s/api.service.yml)
 
-```                                                                
-+--------------+           +---------------+         +--------------+  
-|Users         |---------∈ |GroupsUsers    | ∋-------|Groups        |  
-|--------------|           |---------------|         |--------------|  
-|id            |           |id             |         |id            |  
-|email         |           |groupID        |         |name          |  
-|password      |           |userID         |         |ownerID       |  
-|firstName     |           |createdAt      |         |createdAt     |  
-|lastName      |           |               |         |updatedAt     |  
-|createdAt     |           |               |         |              |  
-|updatedAt     |           |               |         |              |  
-|...           |           |               |         |              |  
-+--------------+           +---------------+         +--------------+  
+```sh
+kubectl apply -f .k8s/api.deployment.yml \
+  -f .k8s/api.ingress.yml \
+  -f .k8s/api.service.yml 
 ```
+
 
 ### Code Generation
 There is a very rudimentary code generation script that will create 5 files for you; a model, migration, route, seeder and a test.
@@ -62,6 +55,37 @@ There is a very rudimentary code generation script that will create 5 files for 
 ```sh
 npm run generate -- --modelName="book"
 ```
+
+
+### Generate SDK Client Libraries
+There is an [OpenAPISpec](./OpenApiSpec.yml) in the root of the repo. The project includes code generation config files for PHP, JavaScript and Swift. Use the below command to generate SDK Client Libraries for your API. A full list of supported langauages [can be found here](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#overview)
+
+
+```sh
+docker run --rm \
+  -v ${PWD}:/app \
+  -w /app \
+  openapitools/openapi-generator-cli batch sdk/config/*.yaml
+```
+
+### DB Structure
+The DB structure is the optimum balance of functionality and minimalism. A User can belong to many Groups through the GroupsUsers table. This allows you to make very basic single-user applications that do not even require the concept of groups or full SaaS solutions with complex User-Group relationships.
+
+```                                                                
++--------------+           +---------------+         +--------------+  
+|Users         | --------∈ |GroupsUsers    | ∋------|Groups        |  
+|--------------|           |---------------|         |--------------|  
+|id            |           |id             |         |id            |  
+|email         |           |groupID        |         |name          |  
+|password      |           |userID         |         |ownerID       |  
+|firstName     |           |createdAt      |         |createdAt     |  
+|lastName      |           +---------------+         |updatedAt     |  
+|createdAt     |                                     +--------------+  
+|updatedAt     |                                                       
+|...           |                                                      
++--------------+                      
+```
+
 
 ### Commands
 | Command            | Description                   | Exmaple                          | 

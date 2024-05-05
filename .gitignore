@@ -8,3 +8,4 @@ public.pem
 */.DS_Store
 k8s/secrets.yml
 kubeconfig.yml
+sdk/dist

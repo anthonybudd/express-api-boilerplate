@@ -7,6 +7,7 @@
 ###########################################
 # Auth
 
+### /auth/login
 POST {{Host}}/auth/login
 content-type: application/json
 
@@ -15,7 +16,21 @@ content-type: application/json
     "password": "Password@1234"
 }
 
-### Check auth
+
+### /_authcheck
 GET {{Host}}/_authcheck
 Authorization: Bearer {{AccessToken}}
 
+
+### /auth/sign-up
+POST {{Host}}/auth/sign-up
+content-type: application/json
+
+{
+    "email": "johnsmith@foobar.net",
+    "password": "Password@1234",
+    "firstName": "John",
+    "lastName": "Smith",
+    "groupName": "",
+    "tos": "2024-04-16"
+}
