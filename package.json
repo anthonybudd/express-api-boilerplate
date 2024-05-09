@@ -19,7 +19,9 @@
         "test": "npm run db:refresh-test && mocha --exit --timeout 10000 tests",
         "_test": "docker exec -ti express-api npm run test",
         "t": "mocha --exit --timeout 10000 tests",
-        "_t": "docker exec -ti express-api npm run t"
+        "_t": "docker exec -ti express-api npm run t",
+        "get": "docker exec -ti express-api /bin/bash -c \"node ./src/scripts/modelGet.js --model=\"${npm_config_model}\" --id=\"${npm_config_id}\"\"",
+        "edit": "docker exec -ti express-api /bin/bash -c \"node ./src/scripts/modelGet.js --model=\"${npm_config_model}\" --id=\"${npm_config_id}\" | vipe | base64 | node ./src/scripts/modelUpdate.js --model=\"${npm_config_model}\" --id=\"${npm_config_id}\"\""
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
@@ -47,7 +49,9 @@
         "express-validator": "^6.13.0",
         "faker": "^4.1.0",
         "i": "^0.3.6",
+        "inflector-js": "^1.0.1",
         "install": "^0.12.1",
+        "js-convert-case": "^4.2.0",
         "jsonwebtoken": "^5.7.0",
         "jwt-decode": "^2.2.0",
         "lodash": "^4.17.21",

@@ -1,5 +1,6 @@
 FROM node:20
 
+RUN apt update && apt install -y vim moreutils
 RUN npm install -g nodemon mocha sequelize sequelize-cli mysql2 eslint
 
 WORKDIR /app

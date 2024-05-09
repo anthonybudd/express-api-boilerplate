@@ -15,19 +15,62 @@ externalDocs:
   url: 'https://github.com/anthonybudd/express-api-boilerplate'
 
 tags:
+  - name: DevOps
+    description: DevOps utility routes
   - name: Auth
-    description: Auth Methods
+    description: Auth routes
+  - name: Groups
+    description: Group routes
+  - name: Users
+    description: User routes
 
 paths:
+  ###############################################
+  ## DevOps
+  '/_healthcheck':
+    get:
+      tags:
+        - DevOps
+      summary: "Returns  {status: 'ok'} if has auth"
+      responses:
+        '200':
+          description: " {status: 'ok'}"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'ok'
+
+  
+  ###############################################
+  ## Auth
   '/auth/login':
     post:
       tags:
         - Auth
-      summary: Generate an access token
-      description: ''
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - email
+              - password
+              properties:
+                email:
+                  type: string
+                  example: user@example.com
+                password:
+                  type: string
+                  example: password
       responses:
         '200':
-          description: Successful login response
+          description: "{accessToken}"
           content:
             application/json:
               schema:
@@ -35,25 +78,455 @@ paths:
                 properties:
                   accessToken:
                     type: string
-                    example: ey.... 
-        '401':
-          description: Invalid input
+                    example: your_access_token
+  '/auth/sign-up':
+    post:
+      tags:
+        - Auth
+      summary: Sign-up
       requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - email
+              - password
+              - firstName
+              - tos
+              properties:
+                email:
+                  type: string
+                  example: user@example.com
+                password:
+                  type: string
+                  example: password
+                firstName:
+                  type: string
+                  example: John
+                tos:
+                  type: boolean
+                  example: true
+      responses:
+        '200':
+          description: "{accessToken}"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: your_access_token
+  '/auth/verify-email/{emailVerificationKey}':
+    get:
+      tags:
+        - Auth
+      summary: Verify Email
+      parameters:
+      - name: emailVerificationKey
+        in: path
+        required: true
+        schema:
+            type: string
+      responses:
+        '200':
+          description: "{success: true}"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true 
+  '/auth/forgot':
+    post:
+      tags:
+        - Auth
+      summary: Forgot Password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  example: user@example.com
+      responses:
+        200:
+          description: "{success: true}"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+  '/auth/get-user-by-reset-key/{passwordResetKey}':
+    get:
+      tags:
+        - Auth
+      summary: Get User for Password Reset
+      parameters:
+        - name: passwordResetKey
+          in: path
+          required: true
+          schema:
+              type: string
+      responses:
+        200:
+          description: "{id, email}"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "user_id"
+                  email:
+                    type: string
+                    example: user@example.com
+  '/auth/reset':
+    post:
+      tags:
+        - Auth
+      summary: Reset Password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+                - passwordResetKey
+              properties:
+                email:
+                  type: string
+                  example: user@example.com
+                password:
+                  type: string
+                  example: "new_password"
+                passwordResetKey:
+                  type: string
+                  example: "reset_key"
+      responses:
+        200:
+          description: "{accessToken}"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: "your_access_token"
+  '/auth/get-user-by-invite-key/{inviteKey}':
+    get:
+      tags:
+        - Auth
+      summary: Get User for Invite
+      parameters:
+        - name: inviteKey
+          in: path
+          required: true
+          schema:
+              type: string
+      responses:
+        200:
+          description: "{id, email}"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "user_id"
+                  email:
+                    type: string
+                    example: user@example.com
+  '/auth/invite':
+    post:
+      tags:
+        - Auth
+      summary: Complete User Invite
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - inviteKey
+                - email
+                - password
+              properties:
+                inviteKey:
+                  type: string
+                  example: "invite_key"
+                email:
+                  type: string
+                  example: user@example.com
+                password:
+                  type: string
+                  example: "new_password"
+      responses:
+        200:
+          description: "{accessToken}"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: "your_access_token"
+  '/auth/_authcheck':
+    get:
+      tags:
+        - Auth
+      summary: Check Authentication Status
+      responses:
+        200:
+          description: "{auth: true}"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  auth:
+                    type: boolean
+                    example: true
+
+  
+  ###############################################
+  ## Groups
+  '/groups/{groupID}':
+    get:
+      tags:
+        - Groups
+      summary: Get Group by ID
+      parameters:
+        - name: groupID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "Returns group information"
+          content:
+            application/json:
+              schema:
+                type: object
+                # Replace {Group} with your actual Group model definition
+                properties:
+                  email:
+                    type: string
+                    description: The email address of the user to invite
+                    example: user@example.com
+    post:
+      tags:
+        - Groups
+      summary: Invite User to Group
+      parameters:
+        - name: groupID
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
               properties:
-                email: 
+                email:
                   type: string
-                  example: user@exmaple.com
-                password:
+                  description: The email address of the user to invite
+                  example: user@example.com
+      responses:
+        200:
+          description: "Returns invited user ID and group ID"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  UserID:
+                    type: string
+                    description: The ID of the invited user
+                    example: "user_id"
+                  GroupID:
+                    type: string
+                    description: The ID of the group
+                    example: "group_id"
+  '/groups/{groupID}/users/invite':
+    post:
+      tags:
+        - Groups
+      summary: Invite User to Group
+      parameters:
+        - name: groupID
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
                   type: string
-                  example: Password@1234
+                  description: The email address of the user to invite
+                  example: user@example.com
+      responses:
+        200:
+          description: "Returns invited user ID and group ID"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  UserID:
+                    type: string
+                    description: The ID of the invited user
+                    example: "user_id"
+                  GroupID:
+                    type: string
+                    description: The ID of the group
+                    example: "group_id"
+  '/groups/{groupID}/users/{userID}':
+    delete:
+      tags:
+        - Groups
+      summary: Remove User from Group
+      parameters:
+        - name: groupID
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: userID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "Returns the ID of the removed user"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  UserID:
+                    type: string
+                    description: The ID of the removed user
+                    example: "user_id"
+
+
+  ###############################################
+  ## User
+  '/user':
+    get:
+      tags:
+        - Users
+      summary: Get the current user
+      responses:
+        200:
+          description: "Returns the current user"
+          content:
+            application/json:
+              schema:
+                type: object
+                # Replace {Group} with your actual Group model definition
+                properties:
+                  email:
+                    type: string
+                    description: The email address of the user to invite
+                    example: user@example.com
+    post:
+      tags:
+        - Users
+      summary: Update the current user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The email address of the user to invite
+                  example: user@example.com
+      responses:
+        200:
+          description: "Returns invited user ID and group ID"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  UserID:
+                    type: string
+                    description: The ID of the invited user
+                    example: "user_id"
+                  GroupID:
+                    type: string
+                    description: The ID of the group
+                    example: "group_id"
+  '/user/update-password':
+    post:
+      tags:
+        - Users
+      summary: Update password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The email address of the user to invite
+                  example: user@example.com
+      responses:
+        200:
+          description: "Returns invited user ID and group ID"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  UserID:
+                    type: string
+                    description: The ID of the invited user
+                    example: "user_id"
+                  GroupID:
+                    type: string
+                    description: The ID of the group
+                    example: "group_id"
+  
 
 components:
   securitySchemes:
     BearerAuth:
       type: http
       scheme: bearer
-

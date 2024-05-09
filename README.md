@@ -9,7 +9,7 @@ This project is designed to work with [AnthonyBudd/Vuetify-SPA-Boilerplate](http
 
 - 👥 Users, Groups and Roles
 - 🔐 Auth using JWT's with Passport.js
-- 🌐 Production-ready [Kubernetes config files](./k8s)
+- 🌐 Production-ready [OpenApiSpec.yml](./OpenApiSpec.yml) & [Kubernetes files](./k8s)
 - 🥇 Real-world tested, generated over $50M in revenue
 
 ### Set-up
@@ -23,49 +23,19 @@ npm install
 openssl genrsa -out private.pem 2048
 openssl rsa -in private.pem -outform PEM -pubout -out public.pem
 
-# Optional
-# Find & Replace (case-sensaive, whole repo): "express-api" => "your-api-name" 
+# [Optional] Find & Replace (case-sensaive, whole repo): "express-api" => "your-api-name" 
 
 # Start the app
 docker compose up
 npm run _db:refresh
 npm run _test
 
-# Code Generation
-npm run generate -- --modelName="book"
+# Code generation
+npm run generate -- --model="Book"
 npm run _test
-```
-### Deployment
-Full Kubernetes deployment instructions can be found at [k8s/Deploy.md](./k8s/Deploy.md).
 
-- [api.deployment.yml](./k8s/api.deployment.yml)
-- [api.ingress.yml](./k8s/api.ingress.yml)
-- [api.service.yml](./k8s/api.service.yml)
-
-```sh
-kubectl apply -f .k8s/api.deployment.yml \
-  -f .k8s/api.ingress.yml \
-  -f .k8s/api.service.yml 
-```
-
-
-### Code Generation
-There is a very rudimentary code generation script that will create 5 files for you; a model, migration, route, seeder and a test.
-
-```sh
-npm run generate -- --modelName="book"
-```
-
-
-### Generate SDK Client Libraries
-There is an [OpenAPISpec](./OpenApiSpec.yml) in the root of the repo. The project includes code generation config files for PHP, JavaScript and Swift. Use the below command to generate SDK Client Libraries for your API to `/sdk/dist`. A full list of supported langauages [can be found here](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#overview)
-
-
-```sh
-docker run --rm \
-  -v ${PWD}:/app \
-  -w /app \
-  openapitools/openapi-generator-cli batch sdk/config/*.yaml
+# Edit models interactivly
+npm run edit --model="User" --id="c4644733-deea-47d8-b35a-86f30ff9618e"
 ```
 
 ### DB Structure
@@ -85,18 +55,6 @@ The DB structure is the optimum balance of functionality and minimalism. A User 
 |...           |                                                      
 +--------------+                      
 ```
-
-
-### Commands
-| Command            | Description                   | Exmaple                          | 
-| ------------------ | ----------------------------- | -------------------------------- |
-| generate           | Code generation               | `npm run generate -- --modelName="book"` |
-| jwt                | Generate JWT for a user       | `docker exec -ti express-api node ./src/scripts/jwt.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e"` |
-| forgotPassword     | Generate password reset link  | `docker exec -ti express-api node ./src/scripts/forgotPassword.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e"` |
-| resetPassword      | Password user password        | `docker exec -ti express-api node ./src/scripts/resetPassword.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e" --password="password"` |
-| inviteUser         | Invite user to group          | `docker exec -ti express-api node ./src/scripts/inviteUser.js --email="newuser@example.com" --groupID="fdab7a99-2c38-444b-bcb3-f7cef61c275b"` |
-
-
 
 ### Routes
 | Method      | Route                                                    | Description                           | Payload                               | Response          | 
@@ -124,4 +82,51 @@ The DB structure is the optimum balance of functionality and minimalism. A User 
 | POST        | `/api/v1/user`                                           | Update the current user               | {firstName, lastName}                 | {User}            |  
 | POST        | `/api/v1/user/update-password`                           | Update password                       | {password, newPassword}               | {success: true}   |  
 
+
+### Deployment
+Full Kubernetes deployment instructions can be found in [k8s/Deploy.md](./k8s/Deploy.md).
+
+- [api.deployment.yml](./k8s/api.deployment.yml)
+- [api.service.yml](./k8s/api.service.yml)
+- [api.ingress.yml](./k8s/api.ingress.yml)
+
+```sh
+kubectl apply -f .k8s/api.deployment.yml \
+  -f .k8s/api.ingress.yml \
+  -f .k8s/api.service.yml 
+```
+
+
+### Code Generation
+There is a very rudimentary code generation script that will create 5 files for you; a model, router, migration, seeder and a test. Input your model name using the `--modelName` argument as PascalCase or camelCase. Use `-v` for verbose output and `-d` for a dry run.
+
+```sh
+npm run generate -- --modelName="ModelNameAsPascalCase"
+```
+
+
+### Generate SDK Client Libraries
+There is an [OpenAPISpec](./OpenApiSpec.yml) in the root of the repo. The project includes code generation config files for PHP, JavaScript and Swift. Use the below command to generate SDK Client Libraries for your API to `/sdk/dist`. A full list of supported langauages [can be found here.](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#overview)
+
+
+```sh
+docker run --rm \
+  -v ${PWD}:/app \
+  -w /app \
+  openapitools/openapi-generator-cli batch sdk/config/*.yaml
+```
+
+### Commands
+There are a few helper scripts and commands for interacting with the application.
+
+Some commands need to be run inside the docker container, these commands have been aliased with an underscore prefix, for exmaple `npm run _db:refresh` is an alias for `docker exec -ti express-api npm run db:refresh` which actually runs `./src/scripts/refresh`
+| Command            | Description                   | Exmaple                          | 
+| ------------------ | ----------------------------- | -------------------------------- |
+| generate           | Code generation               | `npm run generate -- --model="book"` |
+| get                | Get a model                   | `npm run get --model="User" --id="c4644733-deea-47d8-b35a-86f30ff9618e"` |
+| edit               | Interactive model editing     | `npm run edit --model="User" --id="c4644733-deea-47d8-b35a-86f30ff9618e"` |
+| jwt                | Generate JWT for a user       | `docker exec -ti express-api node ./src/scripts/jwt.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e"` |
+| forgotPassword     | Generate password reset link  | `docker exec -ti express-api node ./src/scripts/forgotPassword.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e"` |
+| resetPassword      | Password user password        | `docker exec -ti express-api node ./src/scripts/resetPassword.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e" --password="password"` |
+| inviteUser         | Invite user to group          | `docker exec -ti express-api node ./src/scripts/inviteUser.js --email="newuser@example.com" --groupID="fdab7a99-2c38-444b-bcb3-f7cef61c275b"` |
 
