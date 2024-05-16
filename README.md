@@ -12,21 +12,21 @@ This project is designed to work with [AnthonyBudd/Vuetify-SPA-Boilerplate](http
 - 🌐 Production-ready [OpenApiSpec.yml](./OpenApiSpec.yml) & [Kubernetes files](./k8s)
 - 🥇 Real-world tested, generated over $50M in revenue
 
-### Set-up
+
 ```sh
 git clone git@github.com:anthonybudd/express-api-boilerplate.git
 cd express-api-boilerplate
 cp .env.example .env
-npm install
+
+# Optional: Find & Replace (case-sensaive, whole repo): "express-api" => "your-api-name" 
+LC_ALL=C find . -type f -name '*.*' -exec sed -i '' s/express-api/your-api-name/g {} +
 
 # Private RSA key for JWT signing
 openssl genrsa -out private.pem 2048
 openssl rsa -in private.pem -outform PEM -pubout -out public.pem
 
-# Optional: Find & Replace (case-sensaive, whole repo): "express-api" => "your-api-name" 
-find . -type f -name '*.*' -exec sed -i '' s/express-api/your-api-name/g {} +
-
 # Start the app
+npm install
 docker compose up
 npm run _db:refresh
 npm run _test
