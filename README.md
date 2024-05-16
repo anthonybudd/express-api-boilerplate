@@ -23,7 +23,8 @@ npm install
 openssl genrsa -out private.pem 2048
 openssl rsa -in private.pem -outform PEM -pubout -out public.pem
 
-# [Optional] Find & Replace (case-sensaive, whole repo): "express-api" => "your-api-name" 
+# Optional: Find & Replace (case-sensaive, whole repo): "express-api" => "your-api-name" 
+find . -type f -name '*.*' -exec sed -i '' s/express-api/your-api-name/g {} +
 
 # Start the app
 docker compose up
