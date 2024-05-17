@@ -10,3 +10,4 @@ k8s/secrets.yml
 kubeconfig.yml
 sdk/dist
 todo.md
+bin/

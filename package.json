@@ -2,6 +2,7 @@
     "name": "express-api-boilerplate",
     "version": "1.0.0",
     "main": "./src/index.js",
+    "bin": "./src/index.js",
     "author": "Anthony Budd",
     "scripts": {
         "start": "node ./src/",
@@ -21,7 +22,14 @@
         "t": "mocha --exit --timeout 10000 tests",
         "_t": "docker exec -ti express-api npm run t",
         "get": "docker exec -ti express-api /bin/bash -c \"node ./src/scripts/modelGet.js --model=\"${npm_config_model}\" --id=\"${npm_config_id}\"\"",
-        "edit": "docker exec -ti express-api /bin/bash -c \"node ./src/scripts/modelGet.js --model=\"${npm_config_model}\" --id=\"${npm_config_id}\" | vipe | base64 | node ./src/scripts/modelUpdate.js --model=\"${npm_config_model}\" --id=\"${npm_config_id}\"\""
+        "edit": "docker exec -ti express-api /bin/bash -c \"node ./src/scripts/modelGet.js --model=\"${npm_config_model}\" --id=\"${npm_config_id}\" | vipe | base64 | node ./src/scripts/modelUpdate.js --model=\"${npm_config_model}\" --id=\"${npm_config_id}\"\"",
+        "pkg": "pkg ."
+    },
+    "pkg": {
+        "targets": [
+            "node18-macos-arm64"
+        ],
+        "outputPath": "bin"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",

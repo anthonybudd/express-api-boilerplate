@@ -121,13 +121,14 @@ docker run --rm \
 There are a few helper scripts and commands for interacting with the application.
 
 Some commands need to be run inside the docker container, these commands have been aliased with an underscore prefix, for exmaple `npm run _db:refresh` is an alias for `docker exec -ti express-api npm run db:refresh` which actually runs `./src/scripts/refresh`
-| Command            | Description                   | Exmaple                          | 
-| ------------------ | ----------------------------- | -------------------------------- |
-| generate           | Code generation               | `npm run generate -- --model="book"` |
-| get                | Get a model                   | `npm run get --model="User" --id="c4644733-deea-47d8-b35a-86f30ff9618e"` |
-| edit               | Interactive model editing     | `npm run edit --model="User" --id="c4644733-deea-47d8-b35a-86f30ff9618e"` |
-| jwt                | Generate JWT for a user       | `docker exec -ti express-api node ./src/scripts/jwt.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e"` |
-| forgotPassword     | Generate password reset link  | `docker exec -ti express-api node ./src/scripts/forgotPassword.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e"` |
-| resetPassword      | Password user password        | `docker exec -ti express-api node ./src/scripts/resetPassword.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e" --password="password"` |
-| inviteUser         | Invite user to group          | `docker exec -ti express-api node ./src/scripts/inviteUser.js --email="newuser@example.com" --groupID="fdab7a99-2c38-444b-bcb3-f7cef61c275b"` |
+| Command               | Description                   | Exmaple                          | 
+| --------------------- | ----------------------------- | -------------------------------- |
+| generate              | Code generation               | `npm run generate -- --model="book"` |
+| get                   | Get a model                   | `npm run get --model="User" --id="c4644733-deea-47d8-b35a-86f30ff9618e"` |
+| edit                  | Interactive model editing     | `npm run edit --model="User" --id="c4644733-deea-47d8-b35a-86f30ff9618e"` |
+| pkg                   | Compile app                   | `npm run pkg` |
+| jwt.js                | Generate JWT for a user       | `docker exec -ti express-api node ./src/scripts/jwt.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e"` |
+| forgotPassword.js     | Generate password reset link  | `docker exec -ti express-api node ./src/scripts/forgotPassword.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e"` |
+| resetPassword.js      | Password user password        | `docker exec -ti express-api node ./src/scripts/resetPassword.js --userID="c4644733-deea-47d8-b35a-86f30ff9618e" --password="password"` |
+| inviteUser.js         | Invite user to group          | `docker exec -ti express-api node ./src/scripts/inviteUser.js --email="newuser@example.com" --groupID="fdab7a99-2c38-444b-bcb3-f7cef61c275b"` |
 
