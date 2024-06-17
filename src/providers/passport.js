@@ -18,7 +18,7 @@ passport.use(new LocalStrategy({
         include: [Group]
     });
 
-    if (!user) return cb(null, false, { message: 'Incorrect email or password.' });
+    if (!user) return cb(null, false, { message: 'Incorrect email or password.', });
 
     return bcrypt.compare(password, user.password, (err, compare) => {
         if (compare) {

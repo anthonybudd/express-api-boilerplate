@@ -19,7 +19,6 @@ if (!Models[argv['model']]) throw Error('Model does not exist');
         let obj;
 
         for await (const chunk of process.stdin) data += chunk;
-        process.stdout.write(data);
 
         try {
             base64Decoded = atob(data);

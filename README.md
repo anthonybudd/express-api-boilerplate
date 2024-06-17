@@ -2,6 +2,8 @@
 
 <img height="75" src="https://raw.githubusercontent.com/anthonybudd/anthonybudd/master/img/express-api-boilerplate.png?v=1"/>
 
+## ⚠️ I have stopped maintaining this repo in favor of the new [TypeScript version](https://github.com/anthonybudd/express-ts-api-boilerplate)
+
 A very mimimal REST API boilerplate using Express.js, Sequelize and MySQL. 
 
 This project is designed to work with [AnthonyBudd/Vuetify-SPA-Boilerplate](https://github.com/anthonybudd/Vuetify-SPA-boilerplate)
